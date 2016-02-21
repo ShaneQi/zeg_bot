@@ -16,6 +16,6 @@
   }
 
 //  $myfile = fopen("debug", "w") or die("Unable to open file!");
-//  fwrite($myfile, $messageSendRequest);
+//  fwrite($myfile, $jakeReply);
 //  fclose($myfile);
 ?>
