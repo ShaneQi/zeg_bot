@@ -9,10 +9,10 @@
   $chatId = $updateArray["message"]["chat"]["id"];
   $messageId = $updateArray["message"]["message_id"];
 
-  $messageSendRequest = $website."/sendMessage?chat_id=".$chatId."&reply_to_message_id=".$messageId."&text=🙄️";
-
+  //  Jake.
   if (stripos($text, '/jake') !== false) {
-    $sentMessage = file_get_contents($messageSendRequest);
+    $jakeReply = $website."/sendMessage?chat_id=".$chatId."&reply_to_message_id=".$messageId."&text=🙄️";
+    $sentMessage = file_get_contents($jakeReply);
   }
 
 //  $myfile = fopen("debug", "w") or die("Unable to open file!");
