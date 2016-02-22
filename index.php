@@ -10,13 +10,17 @@
   $messageId = $updateArray["message"]["message_id"];
   $messageDateId = $updateArray["message"]["date"];
   $replyToMessageID = $updateArray["message"]["reply_to_message"]["message_id"];
-  $photoFileId = $updateArray["message"]["photo"][1]["file_id"]; 
+  $photo = $updateArray["message"]["photo"];
+    [1]["file_id"]; 
 
   //  Photo.
-  if ($photoFileId) {
+  if ($photo) {
+    end($photo);
+    $lastIndex = key($photo);
+    $photoFileId = $photo[$lastIndex]["file_id"];
     $getPhoto = $website."/getFile?file_id=".$photoFileId;
-    $photo = file_get_contents($getPhoto);
-    $photoArray = json_decode($photo, TRUE);
+    $photoFile = file_get_contents($getPhoto);
+    $photoArray = json_decode($photoFile, TRUE);
     $photoFilePath = $photoArray["result"]["file_path"];
     $photoUrl = "https://api.telegram.org/file/bot".$botToken."/".$photoFilePath;
 
@@ -46,7 +50,7 @@
 
 //  if ($replyToMessageID) { $tof = 1; }
 //  else { $tof = 2; }
-//  $myfile = fopen("debug", "w") or die("Unable to open file!");
-//  fwrite($myfile, $photoArray);
-//  fclose($myfile);
+  $myfile = fopen("debug", "w") or die("Unable to open file!");
+  fwrite($myfile, $update."\n".$photoFileId."\n");
+  fclose($myfile);
 ?>
