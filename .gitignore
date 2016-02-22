@@ -1,2 +1,3 @@
-token.php
-debug
+**/*
+!index.php
+
