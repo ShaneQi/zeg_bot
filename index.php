@@ -11,9 +11,41 @@
   $messageDateId = $updateArray["message"]["date"];
   $replyToMessageID = $updateArray["message"]["reply_to_message"]["message_id"];
   $photo = $updateArray["message"]["photo"];
-    [1]["file_id"]; 
-
+  $voice = $updateArray["message"]["voice"];
+  $fromUserId = $updateArray["message"]["from"]["id"];
+ 
   //  Helper.
+##//  SVoice.
+  //  Collect.
+  if ($fromUserId == 127696982 && $voice) {
+    $voiceObject = array('chatId' => $chatId, 'messageId' => $messageId);
+    $voiceArray = json_decode(file_get_contents('svoice.json'), true);
+    if (count($voiceArray) > 9) {
+      $newFile = "svoice_archive/".time().".json"; 
+      copy('svoice.json', $newFile);
+      $newArray = array($voiceObject);
+      $jsonFile=fopen("svoice.json",'w');
+      fwrite($jsonFile, json_encode($newArray));
+      fclose($jsonFile);
+    }
+    else {
+      array_push($voiceArray, $voiceObject);
+      $jsonFile=fopen("svoice.json",'w');
+      fwrite($jsonFile, json_encode($voiceArray));
+      fclose($jsonFile);
+    }
+    $saveSVoiceReply = $website."/sendMessage?chat_id=".$chatId."&text=:)"."&reply_to_message_id=".$messageId;
+    $sentMessage = file_get_contents($saveSVoiceReply);
+  }
+  //  Checkout.
+  if (stripos($text, '/svoice') !== false) {
+    $voiceArray = json_decode(file_get_contents('svoice.json'), true);
+    foreach ($voiceArray as $voiceMsg) {
+      $forwardSVoice = $website."/forwardMessage?chat_id=".$chatId."&message_id=".$voiceMsg['messageId']."&from_chat_id=".$voiceMsg['chatId'];
+      $sentMessage = file_get_contents($forwardSVoice);
+    }    
+  }
+
   //  Photo.
   if ($photo) {
     //  Put the pointer the the end element of photo array.
