@@ -15,7 +15,7 @@
   $fromUserId = $updateArray["message"]["from"]["id"];
  
   //  Helper.
-##//  SVoice.
+  //  SVoice.
   //  Collect.
   if ($fromUserId == 127696982 && $voice) {
     $voiceObject = array('chatId' => $chatId, 'messageId' => $messageId);
@@ -34,8 +34,8 @@
       fwrite($jsonFile, json_encode($voiceArray));
       fclose($jsonFile);
     }
-    $saveSVoiceReply = $website."/sendMessage?chat_id=".$chatId."&text=:)"."&reply_to_message_id=".$messageId;
-    $sentMessage = file_get_contents($saveSVoiceReply);
+    ##$saveSVoiceReply = $website."/sendMessage?chat_id=".$chatId."&text=:)"."&reply_to_message_id=".$messageId;
+    ##$sentMessage = file_get_contents($saveSVoiceReply);
   }
   //  Checkout.
   if (stripos($text, '/svoice') !== false) {
@@ -61,11 +61,11 @@
 
     file_put_contents(realpath("../../public_ftp/telegram_photo").'/'.$messageDateId.substr($photoFilePath, -4), file_get_contents($photoUrl));
 
-    $savePhotoReply = $website."/sendMessage?chat_id=".$chatId."&text=You da driver!"."&reply_to_message_id=".$messageId;
-    $sentMessage = file_get_contents($savePhotoReply);
+##    $savePhotoReply = $website."/sendMessage?chat_id=".$chatId."&text=You da driver!"."&reply_to_message_id=".$messageId;
+##    $sentMessage = file_get_contents($savePhotoReply);
   }
 
-##//  Cuckoo
+  //  Cuckoo
   $lastText = file_get_contents('cuckoo');
   if (strcmp($lastText, $text) == 0) {
     $cuckooMessageRequest = $website."/sendMessage?chat_id=".$chatId."&text=".$text;
@@ -94,8 +94,26 @@
     $sentMessage = file_get_contents($krReply);
   }
 
+  //  Hybridrbt.
+  if (stripos($text, '/学长') !== false) {
+    $hybridrbtReply = $website."/sendMessage?chat_id=".$chatId."&text=눈_눈";
+    if ($replyToMessageID) {
+      $hybridrbtReply = $hybridrbtReply."&reply_to_message_id=".$replyToMessageID;
+    }
+    $sentMessage = file_get_contents($hybridrbtReply);
+  }
+
+  //  ijoy.
+  if (stripos($text, '/ijoy') !== false) {
+    $ijoyReply = $website."/sendPhoto?chat_id=".$chatId."&photo=AgADAQADoqoxG49wFAWrzpvZPqt9trGS5y8ABE4w87Zf4bpCkz4AAgI";
+    if ($replyToMessageID) {
+      $ijoyReply = $ijoyReply."&reply_to_message_id=".$replyToMessageID;
+    }
+    $sentMessage = file_get_contents($ijoyReply);
+  }
+
   //  Straight replying.
-##//  Joy tit.
+  //  Joy tit.
   if (stripos($text, '#果汁上大胸') !== false) {
     $joyTitReply = $website."/sendSticker?chat_id=".$chatId."&sticker=BQADBQADqAIAAmdqYwRLjLaU-biukAI&reply_to_message_id=".$messageId;
     $sentMessage = file_get_contents($joyTitReply);
@@ -109,7 +127,7 @@
   }
 
 //  $myfile = fopen("debug", "w") or die("Unable to open file!");
-//  fwrite($myfile, $update);
+//  fwrite($myfile, $sss);
 //  fclose($myfile);
 //  $debugMessageRequest = $website."/sendMessage?chat_id=80548625&text=".$text;
 //  $debugMessage = file_get_contents($cuckooMessageRequest);
