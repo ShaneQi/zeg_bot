@@ -126,8 +126,14 @@
     $sentMessage = file_get_contents($lbsTypingReply);
   }
 
+	// /sweetie
+  if (stripos($text, '/sweetie') !== false) {
+		$sweetieMessage = $website."/forwardMessage?message_id=29507&from_chat_id=80548625&chat_id=".$chatId;
+    $sentMessage = file_get_contents($sweetieMessage);
+	}
+
 //  $myfile = fopen("debug", "w") or die("Unable to open file!");
-//  fwrite($myfile, $sss);
+//  fwrite($myfile, $update);
 //  fclose($myfile);
 //  $debugMessageRequest = $website."/sendMessage?chat_id=80548625&text=".$text;
 //  $debugMessage = file_get_contents($cuckooMessageRequest);
