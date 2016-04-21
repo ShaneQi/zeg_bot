@@ -127,10 +127,10 @@
   }
 
 	// /sweetie
-  if (stripos($text, '/sweetie') !== false) {
-		$sweetieMessage = $website."/forwardMessage?message_id=29507&from_chat_id=80548625&chat_id=".$chatId;
-    $sentMessage = file_get_contents($sweetieMessage);
-	}
+//  if (stripos($text, '/sweetie') !== false) {
+//		$sweetieMessage = $website."/forwardMessage?message_id=29507&from_chat_id=80548625&chat_id=".$chatId;
+//    $sentMessage = file_get_contents($sweetieMessage);
+//	}
 
 //  $myfile = fopen("debug", "w") or die("Unable to open file!");
 //  fwrite($myfile, $update);
