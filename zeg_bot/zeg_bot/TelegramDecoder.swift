@@ -66,11 +66,11 @@ public class TelegramDecode: JSONDecoder {
 		/* OPTIONAL - message. */
 		var message: Message?
 		
-		if let messageJson = jsonDictionary["message"] {
+		do {
+		
+			message = try decodeMessage(jsonDictionary["message"])
 			
-			print("TBI!")
-			
-		} else {
+		} catch {
 		
 			message = nil
 			
@@ -79,43 +79,91 @@ public class TelegramDecode: JSONDecoder {
 		/* OPTIONAL - inline_query. */
 		var inline_query: InlineQuery?
 		
-		if let inline_query = jsonDictionary["inline_query"] {
-			
-			print("TBI!")
-			
-		} else {
-			
-			inline_query = nil
-			
-		}
-		
 		/* OPTIONAL - chosen_inline_result. */
 		var chosen_inline_result: ChosenInlineResult?
-		
-		if let chosen_inline_result = jsonDictionary["chosen_inline_result"] {
-			
-			print("TBI!")
-			
-		} else {
-			
-			chosen_inline_result = nil
-			
-		}
 		
 		/* OPTIONAL - callback_query. */
 		var callback_query: CallbackQuery?
 		
-		if let callback_query = jsonDictionary["callback_query"] {
+		return Update(update_id: update_id, message: message, inline_query: inline_query, chosen_inline_result: chosen_inline_result, callback_query: callback_query)
+		
+	}
+	
+	/* Decode JSON String to Message instance. */
+	public func decodeMessage(jsonString: String) throws -> Message {
+		
+		var jsonValue: JSONValue
+		
+		/* Decode to JSONValue */
+		do {
 			
-			print("TBI!")
+			jsonValue = try jsonDecoder.decode(jsonString)
 			
-		} else {
+		} catch let e {
 			
-			callback_query = nil
+			throw e
 			
 		}
 		
-		return Update(update_id: update_id, message: message, inline_query: inline_query, chosen_inline_result: chosen_inline_result, callback_query: callback_query)
+		/* Call JSONValue decoder. */
+		do {
+			
+			return try decodeMessage(jsonValue)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+	}
+	
+	/* Decode JSONValue to Message instance. */
+	public func decodeMessage(jsonValue: JSONValue) throws -> Message {
+		
+		guard (jsonValue is JSONDictionaryType) else {
+			
+			throw JSONError.UnhandledType("Request body is not JSONDictionaryType.")
+			
+		}
+		
+		let jsonDictionary = jsonValue as! JSONDictionaryType
+		
+		/* message_id. */
+		guard let message_id = jsonDictionary["message_id"] as? Int else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'message_id' is not Int.")
+			
+		}
+		
+		/* date. */
+		guard let date = jsonDictionary["date"] as? Int else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'date' is not Int.")
+			
+		}
+		
+		/* chat. */
+		guard let chat = jsonDictionary["chat"] as? JSONValue else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'chat' is not JSONValue.")
+			
+		}
+		
+		/* OPTIONAL - text. */
+		var text: String?
+		
+		if let textValue = jsonDictionary["text"] as? String {
+			
+			text = textValue
+			
+		} else {
+			
+			text = nil
+			
+		}
+		
+		return Message(message_id: message_id, date: date, chat: Chat(), text: text)
 		
 	}
 	

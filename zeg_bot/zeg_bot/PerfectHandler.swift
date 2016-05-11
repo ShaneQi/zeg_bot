@@ -14,18 +14,29 @@ class ZEGHandler: RequestHandler {
 	
 	func handleRequest(request: WebRequest, response: WebResponse) {
 		
+		var updateObject: Update
+		
 		do {
 			
-			let a = try TelegramDecode.sharedInstance.decodeUpdate(request.postBodyString)
-			response.appendBodyString("\(a.update_id)")
+			updateObject = try TelegramDecode.sharedInstance.decodeUpdate(request.postBodyString)
+			
+			if updateObject.message?.text == "/学长" {
+			
+				TelegramResponse.sharedInstace.stupidReply()
+				
+			}
+			
+//			response.appendBodyString("\(updateObject.update_id)")
+			
+			response.requestCompletedCallback()
 			
 		} catch let error{
+			
 			print("\(error)")
+			
 		}
 		
-		
-		
-		response.requestCompletedCallback()
+
 		
 	}
 	
