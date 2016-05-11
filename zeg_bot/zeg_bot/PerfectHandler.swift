@@ -13,7 +13,20 @@ class ZEGHandler: RequestHandler {
 	static let sharedInstance = ZEGHandler()
 	
 	func handleRequest(request: WebRequest, response: WebResponse) {
-		response.appendBodyString("get posts")
+		
+		do {
+			
+			let a = try TelegramDecode.sharedInstance.decodeUpdate(request.postBodyString)
+			response.appendBodyString("\(a.update_id)")
+			
+		} catch let error{
+			print("\(error)")
+		}
+		
+		
+		
 		response.requestCompletedCallback()
+		
 	}
+	
 }

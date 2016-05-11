@@ -1,0 +1,21 @@
+{
+	"update_id": 719528423,
+	"message": {
+		"message_id": 35454,
+		"from": {
+			"id": 80548625,
+			"first_name": "Shane",
+			"last_name": "Qi",
+			"username": "ShaneQi"
+		},
+		"chat": {
+			"id": 80548625,
+			"first_name": "Shane",
+			"last_name": "Qi",
+			"username": "ShaneQi",
+			"type": "private"
+		},
+		"date": 1462855531,
+		"text": "/学长"
+	}
+}
