@@ -144,10 +144,15 @@ public class TelegramDecode: JSONDecoder {
 		}
 		
 		/* chat. */
-		guard let chat = jsonDictionary["chat"] as? JSONValue else {
+		var chat: Chat
+		do {
+		
+			chat = try decodeChat(jsonDictionary["chat"])
 			
-			throw TelegramDecoderError.BadRequest("Field 'chat' is not JSONValue.")
+		} catch let e {
 			
+			throw e
+		
 		}
 		
 		/* OPTIONAL - text. */
@@ -163,7 +168,129 @@ public class TelegramDecode: JSONDecoder {
 			
 		}
 		
-		return Message(message_id: message_id, date: date, chat: Chat(), text: text)
+		/* OPTIONAL - reply_to_message. */
+		var reply_to_message: Message?
+		do {
+			
+			reply_to_message = try decodeMessage(jsonDictionary["reply_to_message"])
+			
+		} catch {
+			
+			reply_to_message = nil
+			
+		}
+		
+		return Message(message_id: message_id, date: date, chat: chat, text: text, reply_to_message: reply_to_message)
+		
+	}
+	
+	/* Decode JSON String to Chat instance. */
+	public func decodeChat(jsonString: String) throws -> Chat {
+		
+		var jsonValue: JSONValue
+		
+		/* Decode to JSONValue */
+		do {
+			
+			jsonValue = try jsonDecoder.decode(jsonString)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+		/* Call JSONValue decoder. */
+		do {
+			
+			return try decodeChat(jsonValue)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+	}
+	
+	/* Decode JSONValue to Message instance. */
+	public func decodeChat(jsonValue: JSONValue) throws -> Chat {
+		
+		guard (jsonValue is JSONDictionaryType) else {
+			
+			throw JSONError.UnhandledType("Request body is not JSONDictionaryType.")
+			
+		}
+		
+		let jsonDictionary = jsonValue as! JSONDictionaryType
+		
+		/* id */
+		guard let id = jsonDictionary["id"] as? Int else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'id' is not Int.")
+			
+		}
+		
+		/* type */
+		guard let type = jsonDictionary["type"] as? String else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'type' is not String.")
+			
+		}
+		
+		/* OPTIONAL - title. */
+		var title: String?
+		
+		if let titleValue = jsonDictionary["title"] as? String {
+			
+			title = titleValue
+			
+		} else {
+			
+			title = nil
+			
+		}
+		
+		/* OPTIONAL - username. */
+		var username: String?
+		
+		if let usernameValue = jsonDictionary["username"] as? String {
+			
+			username = usernameValue
+			
+		} else {
+			
+			username = nil
+			
+		}
+		
+		/* OPTIONAL - first_name. */
+		var first_name: String?
+		
+		if let first_nameValue = jsonDictionary["first_name"] as? String {
+			
+			first_name = first_nameValue
+			
+		} else {
+			
+			first_name = nil
+			
+		}
+		
+		/* OPTIONAL - last_name. */
+		var last_name: String?
+		
+		if let last_nameValue = jsonDictionary["last_name"] as? String {
+			
+			last_name = last_nameValue
+			
+		} else {
+			
+			last_name = nil
+			
+		}
+		
+		return Chat(id: id, type: type, title: title, username: username, first_name: first_name, last_name: last_name)
 		
 	}
 	

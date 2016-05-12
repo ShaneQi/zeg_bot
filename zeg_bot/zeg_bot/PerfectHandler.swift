@@ -22,7 +22,7 @@ class ZEGHandler: RequestHandler {
 			
 			if updateObject.message?.text == "/学长" {
 			
-				TelegramResponse.sharedInstace.stupidReply()
+//				TelegramResponse.sharedInstace.stupidReply()
 				
 			}
 			
