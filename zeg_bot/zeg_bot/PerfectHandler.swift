@@ -12,31 +12,45 @@ class ZEGHandler: RequestHandler {
 	
 	static let sharedInstance = ZEGHandler()
 	
+	private var cuckoo = ""
+	
 	func handleRequest(request: WebRequest, response: WebResponse) {
-		
-		var updateObject: Update
 		
 		do {
 			
-			updateObject = try TelegramDecode.sharedInstance.decodeUpdate(request.postBodyString)
+			let update = try TelegramDecode.sharedInstance.decodeUpdate(request.postBodyString)
 			
-			if updateObject.message?.text == "/学长" {
+			if let message = update.message {
 			
-//				TelegramResponse.sharedInstace.stupidReply()
-				
+				if let text = message.text {
+					
+					switch text.uppercaseString {
+					
+					/* Rules go here (order sensitive). */
+					case cuckoo:
+						ZEGResponse.sharedInstace.smartReply(to: message, content: text)
+
+					case "/学长":
+						ZEGResponse.sharedInstace.smartReply(to: message, content: "눈_눈")
+						
+					default:
+						break
+						
+					}
+					
+					cuckoo = text.uppercaseString
+					
+				}
+			
 			}
 			
-//			response.appendBodyString("\(updateObject.update_id)")
+		} catch let e{
 			
-			response.requestCompletedCallback()
-			
-		} catch let error{
-			
-			print("\(error)")
+			print("\(e)")
 			
 		}
 		
-
+		response.requestCompletedCallback()
 		
 	}
 	

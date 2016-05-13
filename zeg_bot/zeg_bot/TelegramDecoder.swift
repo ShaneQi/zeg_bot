@@ -76,16 +76,18 @@ public class TelegramDecode: JSONDecoder {
 			
 		}
 		
-		/* OPTIONAL - inline_query. */
-		var inline_query: InlineQuery?
+//		/* OPTIONAL - inline_query. */
+//		var inline_query: InlineQuery?
+//		
+//		/* OPTIONAL - chosen_inline_result. */
+//		var chosen_inline_result: ChosenInlineResult?
+//		
+//		/* OPTIONAL - callback_query. */
+//		var callback_query: CallbackQuery?
 		
-		/* OPTIONAL - chosen_inline_result. */
-		var chosen_inline_result: ChosenInlineResult?
-		
-		/* OPTIONAL - callback_query. */
-		var callback_query: CallbackQuery?
-		
-		return Update(update_id: update_id, message: message, inline_query: inline_query, chosen_inline_result: chosen_inline_result, callback_query: callback_query)
+		return Update(update_id: update_id, message: message
+//			, inline_query: inline_query, chosen_inline_result: chosen_inline_result, callback_query: callback_query
+		)
 		
 	}
 	

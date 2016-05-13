@@ -35,7 +35,7 @@ public class Message: Receivable {
 		
 		var recipientIdentification = [String : String]()
 		recipientIdentification["chat_id"] = "\(self.chat.id)"
-		recipientIdentification["reply_to_message"] = "\(self.message_id)"
+		recipientIdentification["reply_to_message_id"] = "\(self.message_id)"
 		return recipientIdentification
 		
 	} ()
