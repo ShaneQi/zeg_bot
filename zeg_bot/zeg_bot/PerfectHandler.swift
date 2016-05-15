@@ -47,6 +47,15 @@ class ZEGHandler: RequestHandler {
 					case "/JAKE":
 						ZEGResponse.sharedInstace.smartReply(to: message, content: jake)
 						
+					case "/DUYAOO":
+						ZEGResponse.sharedInstace.smartReply(to: message, content: "哎呦喂，不得了了！妖妖灵！")
+						
+					case "/KR":
+						ZEGResponse.sharedInstace.smartReply(to: message, content: kr)
+						
+					case "#朝君ISTYPING":
+						ZEGResponse.sharedInstace.directSend(to: message, content: cjtyping)
+						
 					case "/WHOSYOURDADDY":
 						mode = (mode + 1) % 2
 						if mode == 1 { print("Switched to dev mode.") }
@@ -58,6 +67,10 @@ class ZEGHandler: RequestHandler {
 					}
 					
 					cuckoo = text.uppercaseString
+					
+				} else {
+				
+					cuckoo = ""
 					
 				}
 			
