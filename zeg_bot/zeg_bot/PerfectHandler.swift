@@ -14,7 +14,15 @@ class ZEGHandler: RequestHandler {
 	
 	private var cuckoo = ""
 	
+	private var mode = 0
+	
 	func handleRequest(request: WebRequest, response: WebResponse) {
+		
+		if case 1 = mode {
+			
+			print(request.postBodyString)
+			
+		}
 		
 		do {
 			
@@ -35,6 +43,14 @@ class ZEGHandler: RequestHandler {
 						
 					case "/JOY":
 						ZEGResponse.sharedInstace.smartReply(to: message, content: joy)
+						
+					case "/JAKE":
+						ZEGResponse.sharedInstace.smartReply(to: message, content: jake)
+						
+					case "/WHOSYOURDADDY":
+						mode = (mode + 1) % 2
+						if mode == 1 { print("Switched to dev mode.") }
+						else { print("Switched to normal mode.") }
 						
 					default:
 						break
