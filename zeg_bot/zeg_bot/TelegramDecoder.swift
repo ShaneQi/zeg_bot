@@ -1,5 +1,5 @@
 //
-//  JSONDecoder.swift
+//  TelegramDecoder.swift
 //  zeg_bot
 //
 //  Created by Shane Qi on 5/10/16.
@@ -8,13 +8,15 @@
 
 import PerfectLib
 
-public class TelegramDecode: JSONDecoder {
+public class TelegramDecoder {
 	
 	/* Singleton. */
-	static let sharedInstance = TelegramDecode()
+	static let sharedInstance = TelegramDecoder()
 	
 	/* Shared JSONDecoder instance. */
-	let jsonDecoder = JSONDecoder()
+	
+//	let jsonDecoder = JSONDecoder()
+	let jsonDecoder = MutatedJSONDecoder()
 	
 	/* Decode JSON String to Update instance. */
 	public func decodeUpdate(jsonString: String) throws -> Update {

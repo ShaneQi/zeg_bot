@@ -18,7 +18,7 @@ class ZEGHandler: RequestHandler {
 		
 		do {
 			
-			let update = try TelegramDecode.sharedInstance.decodeUpdate(request.postBodyString)
+			let update = try TelegramDecoder.sharedInstance.decodeUpdate(request.postBodyString)
 			
 			if let message = update.message {
 			
@@ -32,6 +32,9 @@ class ZEGHandler: RequestHandler {
 
 					case "/学长":
 						ZEGResponse.sharedInstace.smartReply(to: message, content: "눈_눈")
+						
+					case "/JOY":
+						ZEGResponse.sharedInstace.smartReply(to: message, content: joy)
 						
 					default:
 						break

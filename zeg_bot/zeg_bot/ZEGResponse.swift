@@ -24,7 +24,7 @@ public class ZEGResponse {
 		
 		} else {
 		
-			performReponse(message, content: content)
+			performReponse(message.chat, content: content)
 		
 		}
 		
