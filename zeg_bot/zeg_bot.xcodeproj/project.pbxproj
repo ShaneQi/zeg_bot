@@ -19,6 +19,7 @@
 		BF73CA481CE43E610029C9AD /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF73CA471CE43E610029C9AD /* Sendable.swift */; };
 		BF73CA4B1CE449860029C9AD /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF73CA4A1CE449860029C9AD /* String.swift */; };
 		BF74B4AD1CE8381C004C2BEE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74B4AC1CE8381C004C2BEE /* User.swift */; };
+		BF74B4AF1CE84C86004C2BEE /* Forwardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74B4AE1CE84C86004C2BEE /* Forwardable.swift */; };
 		BFCBA4D61CE19318005810FA /* zeg_bot.h in Headers */ = {isa = PBXBuildFile; fileRef = BFCBA4D51CE19318005810FA /* zeg_bot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFCBA4DD1CE19318005810FA /* zeg_bot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCBA4D21CE19318005810FA /* zeg_bot.framework */; };
 		BFCBA4E21CE19318005810FA /* zeg_botTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4E11CE19318005810FA /* zeg_botTests.swift */; };
@@ -54,6 +55,7 @@
 		BF73CA471CE43E610029C9AD /* Sendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sendable.swift; sourceTree = "<group>"; };
 		BF73CA4A1CE449860029C9AD /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		BF74B4AC1CE8381C004C2BEE /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		BF74B4AE1CE84C86004C2BEE /* Forwardable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forwardable.swift; sourceTree = "<group>"; };
 		BFCBA4D21CE19318005810FA /* zeg_bot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = zeg_bot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCBA4D51CE19318005810FA /* zeg_bot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zeg_bot.h; sourceTree = "<group>"; };
 		BFCBA4D71CE19318005810FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 			children = (
 				BF73CA451CE43DE60029C9AD /* Receivable.swift */,
 				BF73CA471CE43E610029C9AD /* Sendable.swift */,
+				BF74B4AE1CE84C86004C2BEE /* Forwardable.swift */,
 			);
 			name = Protocol;
 			sourceTree = "<group>";
@@ -298,6 +301,7 @@
 				BF5C1FB41CE2E97F00301B7E /* TelegramDecoderError.swift in Sources */,
 				BFCBA4EF1CE196EC005810FA /* PerfectHandler.swift in Sources */,
 				BF2744451CE810AC00A40F23 /* Sticker.swift in Sources */,
+				BF74B4AF1CE84C86004C2BEE /* Forwardable.swift in Sources */,
 				BF73CA461CE43DE60029C9AD /* Receivable.swift in Sources */,
 				BF5C1FC21CE2FF4F00301B7E /* ZEGResponse.swift in Sources */,
 				BF74B4AD1CE8381C004C2BEE /* User.swift in Sources */,

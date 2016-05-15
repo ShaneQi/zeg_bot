@@ -20,11 +20,11 @@ public class ZEGResponse {
 	
 		if let reply_to_message = message.reply_to_message {
 		
-			performReponse(reply_to_message, content: content)
+			performSend(reply_to_message, content: content)
 		
 		} else {
 		
-			performReponse(message.chat, content: content)
+			performSend(message.chat, content: content)
 		
 		}
 		
@@ -32,28 +32,41 @@ public class ZEGResponse {
 	
 	public func directSend(to message: Message, content: Sendable) {
 	
-		performReponse(message.chat, content: content)
+		performSend(message.chat, content: content)
 		
 	}
 	
-	private func performReponse(recipient: Receivable, content: Sendable) {
+	public func performForward(to chat: Chat, with message: Forwardable)  {
 		
-		var url = urlPrefix+content.method+"?"
+		cUrl.url = urlGenerator(urlPrefix, method: "forwardMessage", parameters: [message.forwardIdentification, chat.recipientIdentification])
 		
-		for field in recipient.recipientIdentification {
-			
-			url += field.0+"="+field.1+"&"
-			
-		}
-		
-		for field in content.contentIdentification {
-			
-			url += field.0+"="+field.1+"&"
-			
-		}
-		
-		cUrl.url = url
 		cUrl.performFully()
+	
+	}
+	
+	private func performSend(recipient: Receivable, content: Sendable) {
+		
+		cUrl.url = urlGenerator(urlPrefix, method: content.method, parameters: [recipient.recipientIdentification, content.contentIdentification])
+		
+		cUrl.performFully()
+		
+	}
+	
+	private func urlGenerator(url: String, method: String, parameters: [[String: String]]) -> String{
+	
+		var urlResult = url+method+"?"
+		
+		for dict in parameters {
+			
+			for field in dict {
+				
+				urlResult += field.0+"="+field.1+"&"
+				
+			}
+		
+		}
+
+		return urlResult
 		
 	}
 

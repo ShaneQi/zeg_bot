@@ -29,8 +29,24 @@ class ZEGHandler: RequestHandler {
 			let update = try TelegramDecoder.sharedInstance.decodeUpdate(request.postBodyString)
 			
 			if update.message?.from?.id == tumei && update.message?.voice != nil {
-				
-				
+			
+				do {
+					
+					let sqlite = try SQLite(DB_PATH)
+					
+					if let message_id = update.message?.message_id, chat_id = update.message?.chat.id, file_id = update.message?.voice?.file_id {
+					
+						let sql = "INSERT INTO tmvoice(message_id, chat_id, file_id) values (\(message_id), \(chat_id), '\(file_id)');"
+						
+						try sqlite.execute(sql)
+					
+					}
+					
+				} catch let e {
+					
+					print("\(e)")
+					
+				}
 				
 			}
 
@@ -61,6 +77,29 @@ class ZEGHandler: RequestHandler {
 						
 					case "#朝君ISTYPING":
 						ZEGResponse.sharedInstace.directSend(to: message, content: cjtyping)
+						
+					case "/TMVOICE":
+						do {
+							
+							let sqlite = try SQLite(DB_PATH)
+							try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id DESC LIMIT 10;") {
+								(statement: SQLiteStmt, i:Int) -> () in
+								
+								if let chat = update.message?.chat, message_id = Int(statement.columnText(1)), from_chat_id = Int(statement.columnText(2)) {
+								
+									let message = Message(message_id: message_id, from: nil, date: 0, chat: Chat(id: from_chat_id, type: "", title: nil, username: nil, first_name: nil, last_name: nil), text: nil, reply_to_message: nil, voice: nil)
+									
+									ZEGResponse.sharedInstace.performForward(to: chat, with: message)
+									
+								}
+								
+							}
+							
+						} catch let e {
+							
+							print("\(e)")
+							
+						}
 						
 					case "/WHOSYOURDADDY":
 						mode = (mode + 1) % 2

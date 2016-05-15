@@ -6,7 +6,7 @@
 //  Copyright © 2016 Shane. All rights reserved.
 //
 
-public class Message: Receivable {
+public class Message: Receivable, Forwardable {
 	
 	var message_id: Int
 	var date: Int
@@ -43,6 +43,16 @@ public class Message: Receivable {
 		recipientIdentification["chat_id"] = "\(self.chat.id)"
 		recipientIdentification["reply_to_message_id"] = "\(self.message_id)"
 		return recipientIdentification
+		
+	} ()
+	
+	/* Confrom to Forwardable. */
+	lazy public var forwardIdentification: [String : String] = {
+	
+		var forwardIdentification = [String : String]()
+		forwardIdentification["message_id"] = "\(self.message_id)"
+		forwardIdentification["from_chat_id"] = "\(self.chat.id)"
+		return forwardIdentification
 		
 	} ()
 	
