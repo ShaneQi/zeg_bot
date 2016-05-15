@@ -140,6 +140,18 @@ public class TelegramDecoder {
 			
 		}
 		
+		/* OPTIONAL - from. */
+		var from: User
+		do {
+			
+			from = try decodeUser(jsonDictionary["from"])
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
 		/* date. */
 		guard let date = jsonDictionary["date"] as? Int else {
 			
@@ -184,7 +196,19 @@ public class TelegramDecoder {
 			
 		}
 		
-		return Message(message_id: message_id, date: date, chat: chat, text: text, reply_to_message: reply_to_message)
+		/* OPTIONAL - voice. */
+		var voice: Voice?
+		do {
+			
+			voice = try decodeVoice(jsonDictionary["voice"])
+			
+		} catch {
+			
+			voice = nil
+			
+		}
+		
+		return Message(message_id: message_id, from: from, date: date, chat: chat, text: text, reply_to_message: reply_to_message, voice: voice)
 		
 	}
 	
@@ -295,6 +319,172 @@ public class TelegramDecoder {
 		}
 		
 		return Chat(id: id, type: type, title: title, username: username, first_name: first_name, last_name: last_name)
+		
+	}
+	
+	/* Decode JSON String to Voice instance. */
+	public func decodeVoice(jsonString: String) throws -> Voice {
+		
+		var jsonValue: JSONValue
+		
+		/* Decode to JSONValue */
+		do {
+			
+			jsonValue = try jsonDecoder.decode(jsonString)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+		/* Call JSONValue decoder. */
+		do {
+			
+			return try decodeVoice(jsonValue)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+	}
+	
+	/* Decode JSONValue to Voice instance. */
+	public func decodeVoice(jsonValue: JSONValue) throws -> Voice {
+		
+		guard (jsonValue is JSONDictionaryType) else {
+			
+			throw JSONError.UnhandledType("Request body is not JSONDictionaryType.")
+			
+		}
+		
+		let jsonDictionary = jsonValue as! JSONDictionaryType
+		
+		/* id */
+		guard let file_id = jsonDictionary["file_id"] as? String else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'file_id' is not String.")
+			
+		}
+		
+		guard let duration = jsonDictionary["duration"] as? Int else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'duration' is not Int.")
+			
+		}
+		
+		/* OPTIONAL - mime_type. */
+		var mime_type: String?
+		
+		if let mime_typeValue = jsonDictionary["mime_type"] as? String {
+			
+			mime_type = mime_typeValue
+			
+		} else {
+			
+			mime_type = nil
+			
+		}
+		
+		/* OPTIONAL - mime_type. */
+		var file_size: Int?
+		
+		if let file_sizeValue = jsonDictionary["file_size"] as? Int {
+			
+			file_size = file_sizeValue
+			
+		} else {
+			
+			file_size = nil
+			
+		}
+	
+		return Voice(file_id: file_id, duration: duration, mime_type: mime_type, file_size: file_size)
+		
+	}
+	
+	/* Decode JSON String to User instance. */
+	public func decodeUser(jsonString: String) throws -> User {
+		
+		var jsonValue: JSONValue
+		
+		/* Decode to JSONValue */
+		do {
+			
+			jsonValue = try jsonDecoder.decode(jsonString)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+		/* Call JSONValue decoder. */
+		do {
+			
+			return try decodeUser(jsonValue)
+			
+		} catch let e {
+			
+			throw e
+			
+		}
+		
+	}
+	
+	/* Decode JSONValue to User instance. */
+	public func decodeUser(jsonValue: JSONValue) throws -> User {
+		
+		guard (jsonValue is JSONDictionaryType) else {
+			
+			throw JSONError.UnhandledType("Request body is not JSONDictionaryType.")
+			
+		}
+		
+		let jsonDictionary = jsonValue as! JSONDictionaryType
+		
+		/* id */
+		guard let id = jsonDictionary["id"] as? Int else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'id' is not Int.")
+			
+		}
+		
+		guard let first_name = jsonDictionary["first_name"] as? String else {
+			
+			throw TelegramDecoderError.BadRequest("Field 'first_name' is not String.")
+			
+		}
+		
+		/* OPTIONAL - last_name. */
+		var last_name: String?
+		
+		if let last_nameValue = jsonDictionary["last_name"] as? String {
+			
+			last_name = last_nameValue
+			
+		} else {
+			
+			last_name = nil
+			
+		}
+		
+		/* OPTIONAL - username. */
+		var username: String?
+		
+		if let usernameValue = jsonDictionary["username"] as? String {
+			
+			username = usernameValue
+			
+		} else {
+			
+			username = nil
+			
+		}
+		
+		return User(id: id, first_name: first_name, last_name: last_name, username: username)
 		
 	}
 	

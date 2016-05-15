@@ -28,6 +28,12 @@ class ZEGHandler: RequestHandler {
 			
 			let update = try TelegramDecoder.sharedInstance.decodeUpdate(request.postBodyString)
 			
+			if update.message?.from?.id == tumei && update.message?.voice != nil {
+				
+				
+				
+			}
+
 			if let message = update.message {
 			
 				if let text = message.text {

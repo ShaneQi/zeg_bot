@@ -13,20 +13,26 @@ public class Message: Receivable {
 	var chat: Chat
 	
 	/* Optional. */
+	var from: User?
 	var text: String?
 	var reply_to_message: Message?
+	var voice: Voice?
 	
 	init(message_id: Int,
+	     from: User?,
 	     date: Int,
 	     chat: Chat,
 	     text: String?,
-	     reply_to_message: Message?) {
+	     reply_to_message: Message?,
+	     voice: Voice?) {
 		
 		self.message_id = message_id
+		self.from = from
 		self.date = date
 		self.chat = chat
 		self.text = text
 		self.reply_to_message = reply_to_message
+		self.voice = voice
 
 	}
 	

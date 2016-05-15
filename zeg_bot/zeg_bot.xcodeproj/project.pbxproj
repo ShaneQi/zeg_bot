@@ -10,6 +10,7 @@
 		BF16EEFC1CE5AB2D00B33402 /* PhotoSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF16EEFB1CE5AB2D00B33402 /* PhotoSize.swift */; };
 		BF16EF001CE671E100B33402 /* MutatedJSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF16EEFF1CE671E100B33402 /* MutatedJSONDecoder.swift */; };
 		BF2744451CE810AC00A40F23 /* Sticker.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2744441CE810AC00A40F23 /* Sticker.swift */; };
+		BF2744491CE8321000A40F23 /* Voice.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2744481CE8321000A40F23 /* Voice.swift */; };
 		BF5C1FAA1CE2DF4C00301B7E /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C1FA91CE2DF4C00301B7E /* Message.swift */; };
 		BF5C1FB41CE2E97F00301B7E /* TelegramDecoderError.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C1FB31CE2E97F00301B7E /* TelegramDecoderError.swift */; };
 		BF5C1FBE1CE2F61E00301B7E /* Chat.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF5C1FBD1CE2F61E00301B7E /* Chat.swift */; };
@@ -17,6 +18,7 @@
 		BF73CA461CE43DE60029C9AD /* Receivable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF73CA451CE43DE60029C9AD /* Receivable.swift */; };
 		BF73CA481CE43E610029C9AD /* Sendable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF73CA471CE43E610029C9AD /* Sendable.swift */; };
 		BF73CA4B1CE449860029C9AD /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF73CA4A1CE449860029C9AD /* String.swift */; };
+		BF74B4AD1CE8381C004C2BEE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74B4AC1CE8381C004C2BEE /* User.swift */; };
 		BFCBA4D61CE19318005810FA /* zeg_bot.h in Headers */ = {isa = PBXBuildFile; fileRef = BFCBA4D51CE19318005810FA /* zeg_bot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFCBA4DD1CE19318005810FA /* zeg_bot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCBA4D21CE19318005810FA /* zeg_bot.framework */; };
 		BFCBA4E21CE19318005810FA /* zeg_botTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4E11CE19318005810FA /* zeg_botTests.swift */; };
@@ -43,6 +45,7 @@
 		BF16EEFB1CE5AB2D00B33402 /* PhotoSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotoSize.swift; sourceTree = "<group>"; };
 		BF16EEFF1CE671E100B33402 /* MutatedJSONDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MutatedJSONDecoder.swift; sourceTree = "<group>"; };
 		BF2744441CE810AC00A40F23 /* Sticker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sticker.swift; sourceTree = "<group>"; };
+		BF2744481CE8321000A40F23 /* Voice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Voice.swift; sourceTree = "<group>"; };
 		BF5C1FA91CE2DF4C00301B7E /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		BF5C1FB31CE2E97F00301B7E /* TelegramDecoderError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelegramDecoderError.swift; sourceTree = "<group>"; };
 		BF5C1FBD1CE2F61E00301B7E /* Chat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Chat.swift; sourceTree = "<group>"; };
@@ -50,6 +53,7 @@
 		BF73CA451CE43DE60029C9AD /* Receivable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Receivable.swift; sourceTree = "<group>"; };
 		BF73CA471CE43E610029C9AD /* Sendable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sendable.swift; sourceTree = "<group>"; };
 		BF73CA4A1CE449860029C9AD /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		BF74B4AC1CE8381C004C2BEE /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		BFCBA4D21CE19318005810FA /* zeg_bot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = zeg_bot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCBA4D51CE19318005810FA /* zeg_bot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zeg_bot.h; sourceTree = "<group>"; };
 		BFCBA4D71CE19318005810FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -94,6 +98,8 @@
 				BF73CA4A1CE449860029C9AD /* String.swift */,
 				BF16EEFB1CE5AB2D00B33402 /* PhotoSize.swift */,
 				BF2744441CE810AC00A40F23 /* Sticker.swift */,
+				BF2744481CE8321000A40F23 /* Voice.swift */,
+				BF74B4AC1CE8381C004C2BEE /* User.swift */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -294,11 +300,13 @@
 				BF2744451CE810AC00A40F23 /* Sticker.swift in Sources */,
 				BF73CA461CE43DE60029C9AD /* Receivable.swift in Sources */,
 				BF5C1FC21CE2FF4F00301B7E /* ZEGResponse.swift in Sources */,
+				BF74B4AD1CE8381C004C2BEE /* User.swift in Sources */,
 				BF5C1FBE1CE2F61E00301B7E /* Chat.swift in Sources */,
 				BFCBA4F71CE19E3C005810FA /* Update.swift in Sources */,
 				BF16EEFC1CE5AB2D00B33402 /* PhotoSize.swift in Sources */,
 				BF5C1FAA1CE2DF4C00301B7E /* Message.swift in Sources */,
 				BF73CA4B1CE449860029C9AD /* String.swift in Sources */,
+				BF2744491CE8321000A40F23 /* Voice.swift in Sources */,
 				BFCBA4ED1CE195F7005810FA /* PerfectInit.swift in Sources */,
 				BFCBA4FE1CE1A2DB005810FA /* TelegramDecoder.swift in Sources */,
 				BF16EF001CE671E100B33402 /* MutatedJSONDecoder.swift in Sources */,
