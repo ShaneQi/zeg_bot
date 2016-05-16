@@ -27,42 +27,41 @@ class ZEGHandler: RequestHandler {
 		do {
 			
 			let update = try TelegramDecoder.sharedInstance.decodeUpdate(request.postBodyString)
-			
-			if update.message?.from?.id == tumei && update.message?.voice != nil {
-			
-				do {
+
+			if let message = update.message {
+				
+				if message.from?.id == tumei && message.voice != nil {
 					
-					let sqlite = try SQLite(DB_PATH)
-					
-					let sql = "INSERT INTO tmvoice(update_string) values ('\(request.postBodyString)');"
+					do {
 						
-					try sqlite.execute(sql)
-					
-					// Dev mode feedback.
-					if case 1 = mode {
-					
-						ZEGResponse.sharedInstace.stupidReply(to: update.message!, content: "嗯～")
+						let sqlite = try SQLite(DB_PATH)
+						
+						let sql = "INSERT INTO tmvoice(update_string) values ('\(request.postBodyString)');"
+						
+						try sqlite.execute(sql)
+						
+						// Dev mode feedback.
+						if case 1 = mode {
+							
+							ZEGResponse.sharedInstace.stupidReply(to: update.message!, content: "嗯～")
+							
+						}
+						
+					} catch let e {
+						
+						print("\(e)")
 						
 					}
 					
-				} catch let e {
-					
-					print("\(e)")
-					
 				}
-				
-			}
-
-			if let message = update.message {
 			
 				if let text = message.text {
+					
+					var isCommand = true
 					
 					switch text.uppercaseString {
 					
 					/* Rules go here (order sensitive). */
-					case cuckoo:
-						ZEGResponse.sharedInstace.smartReply(to: message, content: text)
-
 					case "/学长":
 						ZEGResponse.sharedInstace.smartReply(to: message, content: "눈_눈")
 						
@@ -102,7 +101,7 @@ class ZEGHandler: RequestHandler {
 										
 									} catch let e {
 										
-										print(e)
+										print("\(e)")
 									}
 									
 								}
@@ -121,21 +120,32 @@ class ZEGHandler: RequestHandler {
 						else { print("Switched to normal mode.") }
 						
 					default:
+						isCommand = false
 						break
 						
 					}
 					
-					cuckoo = text.uppercaseString
+					if isCommand {
 					
-				} else {
-				
-					cuckoo = ""
+						cuckoo = ""
+					
+					} else if text == cuckoo {
+					
+						ZEGResponse.sharedInstace.directSend(to: message, content: text)
+						cuckoo = ""
+					
+					} else {
+					
+						cuckoo = text
+						
+					}
+					
 					
 				}
 			
 			}
 			
-		} catch let e{
+		} catch let e {
 			
 			print("\(e)")
 			
