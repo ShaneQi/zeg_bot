@@ -23,7 +23,7 @@ public func PerfectServerModuleInit() {
 	do {
 		
 		let sqlite = try SQLite(DB_PATH)
-		try sqlite.execute("CREATE TABLE IF NOT EXISTS tmvoice (id INTEGER PRIMARY KEY AUTOINCREMENT, message_id INTEGER ,chat_id INTEGER ,file_id TEXT)")
+		try sqlite.execute("CREATE TABLE IF NOT EXISTS tmvoice (id INTEGER PRIMARY KEY AUTOINCREMENT, update_string TEXT)")
 		
 	} catch {
 		

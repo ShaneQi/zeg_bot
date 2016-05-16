@@ -34,12 +34,15 @@ class ZEGHandler: RequestHandler {
 					
 					let sqlite = try SQLite(DB_PATH)
 					
-					if let message_id = update.message?.message_id, chat_id = update.message?.chat.id, file_id = update.message?.voice?.file_id {
-					
-						let sql = "INSERT INTO tmvoice(message_id, chat_id, file_id) values (\(message_id), \(chat_id), '\(file_id)');"
+					let sql = "INSERT INTO tmvoice(update_string) values ('\(request.postBodyString)');"
 						
-						try sqlite.execute(sql)
+					try sqlite.execute(sql)
 					
+					// Dev mode feedback.
+					if case 1 = mode {
+					
+						ZEGResponse.sharedInstace.directSend(to: update.message!, content: "嗯～")
+						
 					}
 					
 				} catch let e {
@@ -85,11 +88,22 @@ class ZEGHandler: RequestHandler {
 							try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id DESC LIMIT 10;") {
 								(statement: SQLiteStmt, i:Int) -> () in
 								
-								if let chat = update.message?.chat, message_id = Int(statement.columnText(1)), from_chat_id = Int(statement.columnText(2)) {
+								if let chat = update.message?.chat {
 								
-									let message = Message(message_id: message_id, from: nil, date: 0, chat: Chat(id: from_chat_id, type: "", title: nil, username: nil, first_name: nil, last_name: nil), text: nil, reply_to_message: nil, voice: nil)
-									
-									ZEGResponse.sharedInstace.performForward(to: chat, with: message)
+									do {
+										
+										let fetchedUpdateObject = try TelegramDecoder.sharedInstance.decodeUpdate(statement.columnText(1))
+										
+										if let fetchedMessage = fetchedUpdateObject.message {
+										
+											ZEGResponse.sharedInstace.performForward(to: chat, with: fetchedMessage)
+										
+										}
+										
+									} catch let e {
+										
+										print(e)
+									}
 									
 								}
 								
