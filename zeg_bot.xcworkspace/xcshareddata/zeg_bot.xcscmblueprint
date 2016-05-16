@@ -1,0 +1,30 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "E19A55F418A71C81794CE36CD1920AAD2765A71C",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "E2306DAE0C98D148736A05084B6FAB44F03B4909" : 0,
+    "E19A55F418A71C81794CE36CD1920AAD2765A71C" : 0
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "6075592F-368F-4BD9-8C30-BA1B57524AD5",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "E2306DAE0C98D148736A05084B6FAB44F03B4909" : "zeg_bot\/Perfect\/",
+    "E19A55F418A71C81794CE36CD1920AAD2765A71C" : "zeg_bot\/"
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "zeg_bot",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "zeg_bot.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/qizt\/zeg_bot.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E19A55F418A71C81794CE36CD1920AAD2765A71C"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/PerfectlySoft\/Perfect.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "E2306DAE0C98D148736A05084B6FAB44F03B4909"
+    }
+  ]
+}
