@@ -41,7 +41,7 @@ class ZEGHandler: RequestHandler {
 					// Dev mode feedback.
 					if case 1 = mode {
 					
-						ZEGResponse.sharedInstace.directSend(to: update.message!, content: "嗯～")
+						ZEGResponse.sharedInstace.stupidReply(to: update.message!, content: "嗯～")
 						
 					}
 					

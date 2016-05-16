@@ -36,6 +36,12 @@ public class ZEGResponse {
 		
 	}
 	
+	public func stupidReply(to message: Message, content: Sendable) {
+	
+		performSend(message, content: content)
+	
+	}
+	
 	public func performForward(to chat: Chat, with message: Forwardable)  {
 		
 		cUrl.url = urlGenerator(urlPrefix, method: "forwardMessage", parameters: [message.forwardIdentification, chat.recipientIdentification])
