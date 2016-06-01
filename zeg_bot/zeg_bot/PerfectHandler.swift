@@ -87,29 +87,39 @@ class ZEGHandler: RequestHandler {
 						do {
 							
 							let sqlite = try SQLite(DB_PATH)
+							
+							var messageQueue = [Message]()
+							
 							try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id DESC LIMIT 5;") {
 								(statement: SQLiteStmt, i:Int) -> () in
 								
-								if let chat = update.message?.chat {
-								
-									do {
-										
-										let fetchedUpdateObject = try TelegramDecoder.sharedInstance.decodeUpdate(statement.columnText(1))
-										
-										if let fetchedMessage = fetchedUpdateObject.message {
-										
-											ZEGResponse.sharedInstace.performForward(to: chat, with: fetchedMessage)
-										
-										}
-										
-									} catch let e {
-										
-										print("\(e)")
+								do {
+									
+									let fetchedUpdateObject = try TelegramDecoder.sharedInstance.decodeUpdate(statement.columnText(1))
+									
+									if let fetchedMessage = fetchedUpdateObject.message {
+									
+										messageQueue.append(fetchedMessage)
+									
 									}
+									
+								} catch let e {
+									
+									print("\(e)")
+								}
+								
+							}
+							
+							if let chat = update.message?.chat {
+								
+								while messageQueue.count != 0 {
+									
+									ZEGResponse.sharedInstace.performForward(to: chat, with: messageQueue.popLast()!)
 									
 								}
 								
 							}
+							
 							
 						} catch let e {
 							
