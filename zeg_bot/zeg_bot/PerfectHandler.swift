@@ -84,7 +84,7 @@ class ZEGHandler: RequestHandler {
 						do {
 							
 							let sqlite = try SQLite(DB_PATH)
-							try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id ASC LIMIT 10;") {
+							try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id DESC LIMIT 5;") {
 								(statement: SQLiteStmt, i:Int) -> () in
 								
 								if let chat = update.message?.chat {
