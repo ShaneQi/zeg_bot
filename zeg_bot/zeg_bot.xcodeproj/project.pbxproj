@@ -20,12 +20,12 @@
 		BF73CA4B1CE449860029C9AD /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF73CA4A1CE449860029C9AD /* String.swift */; };
 		BF74B4AD1CE8381C004C2BEE /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74B4AC1CE8381C004C2BEE /* User.swift */; };
 		BF74B4AF1CE84C86004C2BEE /* Forwardable.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF74B4AE1CE84C86004C2BEE /* Forwardable.swift */; };
+		BFB6F6B31CFE6CE400A161B3 /* PerfectLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFB6F6B21CFE6CE400A161B3 /* PerfectLib.framework */; };
 		BFCBA4D61CE19318005810FA /* zeg_bot.h in Headers */ = {isa = PBXBuildFile; fileRef = BFCBA4D51CE19318005810FA /* zeg_bot.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		BFCBA4DD1CE19318005810FA /* zeg_bot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCBA4D21CE19318005810FA /* zeg_bot.framework */; };
 		BFCBA4E21CE19318005810FA /* zeg_botTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4E11CE19318005810FA /* zeg_botTests.swift */; };
 		BFCBA4ED1CE195F7005810FA /* PerfectInit.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4EC1CE195F7005810FA /* PerfectInit.swift */; };
 		BFCBA4EF1CE196EC005810FA /* PerfectHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4EE1CE196EC005810FA /* PerfectHandler.swift */; };
-		BFCBA4F11CE197DC005810FA /* PerfectLib.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BFCBA4F01CE197DC005810FA /* PerfectLib.framework */; };
 		BFCBA4F51CE19D69005810FA /* token.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4F41CE19D69005810FA /* token.swift */; };
 		BFCBA4F71CE19E3C005810FA /* Update.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4F61CE19E3C005810FA /* Update.swift */; };
 		BFCBA4FE1CE1A2DB005810FA /* TelegramDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = BFCBA4FD1CE1A2DB005810FA /* TelegramDecoder.swift */; };
@@ -56,6 +56,7 @@
 		BF73CA4A1CE449860029C9AD /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		BF74B4AC1CE8381C004C2BEE /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		BF74B4AE1CE84C86004C2BEE /* Forwardable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Forwardable.swift; sourceTree = "<group>"; };
+		BFB6F6B21CFE6CE400A161B3 /* PerfectLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PerfectLib.framework; path = "../../../../Library/Developer/Xcode/DerivedData/zeg_bot-csbsydbrhpmxmrfijybxmqyfwzlj/Build/Products/Debug/PerfectLib.framework"; sourceTree = "<group>"; };
 		BFCBA4D21CE19318005810FA /* zeg_bot.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = zeg_bot.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		BFCBA4D51CE19318005810FA /* zeg_bot.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = zeg_bot.h; sourceTree = "<group>"; };
 		BFCBA4D71CE19318005810FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -64,7 +65,6 @@
 		BFCBA4E31CE19318005810FA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BFCBA4EC1CE195F7005810FA /* PerfectInit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerfectInit.swift; sourceTree = "<group>"; };
 		BFCBA4EE1CE196EC005810FA /* PerfectHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PerfectHandler.swift; sourceTree = "<group>"; };
-		BFCBA4F01CE197DC005810FA /* PerfectLib.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PerfectLib.framework; path = "../../../../Library/Developer/Xcode/DerivedData/zeg_bot-csbsydbrhpmxmrfijybxmqyfwzlj/Build/Products/Debug/PerfectLib.framework"; sourceTree = "<group>"; };
 		BFCBA4F41CE19D69005810FA /* token.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = token.swift; sourceTree = "<group>"; };
 		BFCBA4F61CE19E3C005810FA /* Update.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Update.swift; sourceTree = "<group>"; };
 		BFCBA4FD1CE1A2DB005810FA /* TelegramDecoder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TelegramDecoder.swift; sourceTree = "<group>"; };
@@ -76,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BFCBA4F11CE197DC005810FA /* PerfectLib.framework in Frameworks */,
+				BFB6F6B31CFE6CE400A161B3 /* PerfectLib.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,7 +138,7 @@
 		BFCBA4C81CE19318005810FA = {
 			isa = PBXGroup;
 			children = (
-				BFCBA4F01CE197DC005810FA /* PerfectLib.framework */,
+				BFB6F6B21CFE6CE400A161B3 /* PerfectLib.framework */,
 				BFCBA4D41CE19318005810FA /* zeg_bot */,
 				BFCBA4E01CE19318005810FA /* zeg_botTests */,
 				BFCBA4D31CE19318005810FA /* Products */,

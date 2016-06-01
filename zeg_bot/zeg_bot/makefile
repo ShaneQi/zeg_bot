@@ -1,0 +1,24 @@
+# Makefile for Perfect Server
+
+TARGET = zeg_bot
+OS = $(shell uname)
+PERFECT_ROOT = /home/shane/lib/Perfect/PerfectLib
+SWIFTC = swift
+SWIFTC_FLAGS = -frontend -c -module-cache-path $(MODULE_CACHE_PATH) -emit-module -I /usr/local/lib -I $(PERFECT_ROOT)/linked/LibEvent -I $(PERFECT_ROOT)/linked/cURL_Linux \
+	-I $(PERFECT_ROOT)/linked/OpenSSL_Linux -I $(PERFECT_ROOT)/linked/ICU -I $(PERFECT_ROOT)/linked/SQLite3 -I $(PERFECT_ROOT)/linked/LinuxBridge
+MODULE_CACHE_PATH = /tmp/modulecache
+Linux_SHLIB_PATH = $(shell dirname $(shell dirname $(shell which swiftc)))/lib/swift/linux
+SHLIB_PATH = -L$($(OS)_SHLIB_PATH)
+LFLAGS = $(SHLIB_PATH) -luuid -lswiftCore -lswiftGlibc /usr/local/lib/PerfectLib.so -Xlinker -rpath -Xlinker $($(OS)_SHLIB_PATH) -shared
+
+all: $(TARGET)
+
+modulecache:
+	@mkdir -p $(MODULE_CACHE_PATH)
+
+$(TARGET): modulecache
+	$(SWIFTC) $(SWIFTC_FLAGS) User.swift Voice.swift Forwardable.swift MutatedJSONDecoder.swift PerfectInit.swift PerfectHandler.swift TelegramDecoder.swift TelegramDecoderError.swift Chat.swift Message.swift PhotoSize.swift Receivable.swift Sticker.swift Sendable.swift String.swift token.swift Update.swift ZEGResponse.swift -o $@.o -module-name $@ -emit-module-path $@.swiftmodule
+	clang++ $(LFLAGS) $@.o -o $@.so
+
+clean:
+	@rm *.o
