@@ -80,6 +80,9 @@ class ZEGHandler: RequestHandler {
 					case "#朝君ISTYPING":
 						ZEGResponse.sharedInstace.directSend(to: message, content: cjtyping)
 						
+					case "/TAO":
+						ZEGResponse.sharedInstace.directSend(to: message, content: tao)
+						
 					case "/TMVOICE":
 						do {
 							
