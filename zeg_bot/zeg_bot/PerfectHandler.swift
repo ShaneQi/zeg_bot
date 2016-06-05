@@ -29,6 +29,14 @@ class ZEGHandler: RequestHandler {
 		
 		if let message = update?.message {
 			
+			if let locationA = message.location, locationB = message.reply_to_message?.location , userB = message.reply_to_message?.from?.first_name{
+				
+				let distance = Int(ZEGBotPlugin.distance(between: locationA, and: locationB))
+				
+				ZEGResponse.sendMessage(to: message, text: "\(userB) is *\(distance)* miles away from you.", parse_mode: .Markdown, disable_web_page_preview: nil, disable_notification: nil)
+				
+			}
+			
 			if message.from?.id == tumei && message.voice != nil {
 				
 				do {
