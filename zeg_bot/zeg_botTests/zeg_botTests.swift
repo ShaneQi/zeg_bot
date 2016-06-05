@@ -10,8 +10,6 @@ import XCTest
 @testable import zeg_bot
 
 class zeg_botTests: XCTestCase {
-	
-	let jsonString = "{\"update_id\": \"719528423\",\"message\": {\"message_id\": 35454,\"from\": {\"id\": 80548625,\"first_name\": \"Shane\",\"last_name\": \"Qi\",\"username\": \"ShaneQi\"},\"chat\": {\"id\": 80548625,\"first_name\": \"Shane\",\"last_name\": \"Qi\",\"username\": \"ShaneQi\",\"type\": \"private\"},\"date\": 1462855531,\"text\": \"/学长\"}}"
 
     override func setUp() {
         super.setUp()
