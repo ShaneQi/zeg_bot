@@ -17,7 +17,7 @@ modulecache:
 	@mkdir -p $(MODULE_CACHE_PATH)
 
 $(TARGET): modulecache
-	$(SWIFTC) $(SWIFTC_FLAGS) User.swift Voice.swift Forwardable.swift MutatedJSONDecoder.swift PerfectInit.swift PerfectHandler.swift TelegramDecoder.swift TelegramDecoderError.swift Chat.swift Message.swift PhotoSize.swift Receivable.swift Sticker.swift Sendable.swift String.swift token.swift Update.swift ZEGResponse.swift -o $@.o -module-name $@ -emit-module-path $@.swiftmodule
+	$(SWIFTC) $(SWIFTC_FLAGS) PerfectHandler.swift PerfectInit.swift token.swift TypeExtension.swift Types.swift ZEGBotPlugin.swift ZEGDecoder.swift ZEGJSONPatch.swift ZEGResponse.swift -o $@.o -module-name $@ -emit-module-path $@.swiftmodule
 	clang++ $(LFLAGS) $@.o -o $@.so
 
 clean:

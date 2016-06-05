@@ -24,28 +24,96 @@ class ZEGHandler: RequestHandler {
 			
 		}
 		
-		do {
+		
+		let update = ZEGDecoder.decodeUpdate(request.postBodyString)
+		
+		if let message = update?.message {
 			
-			let update = try TelegramDecoder.sharedInstance.decodeUpdate(request.postBodyString)
-
-			if let message = update.message {
+			if message.from?.id == tumei && message.voice != nil {
 				
-				if message.from?.id == tumei && message.voice != nil {
+				do {
 					
+					let sqlite = try SQLite(DB_PATH)
+					
+					let sql = "INSERT INTO tmvoice(update_string) values ('\(request.postBodyString)');"
+					
+					try sqlite.execute(sql)
+					
+					// Dev mode feedback.
+					if case 1 = mode {
+
+						ZEGResponse.sendMessage(to: (update?.message)!, text: "嗯～", parse_mode: nil, disable_web_page_preview: nil, disable_notification: true)
+						
+					}
+					
+				} catch let e {
+					
+					print("\(e)")
+					
+				}
+				
+			}
+		
+			if let text = message.text {
+				
+				var isCommand = true
+				
+				switch text.uppercaseString {
+				
+				/* Rules go here (order sensitive). */
+				case "/学长":
+					ZEGBotPlugin.smartReply(to: message, content: "눈_눈", type: .Text)
+					
+				case "/JOY":
+					ZEGBotPlugin.smartReply(to: message, content: joy, type: .PhotoSize)
+					
+				case "/JAKE":
+					ZEGBotPlugin.smartReply(to: message, content: jake, type: .PhotoSize)
+					
+				case "/DUYAOO":
+					ZEGBotPlugin.smartReply(to: message, content: "哎呦喂，不得了了！妖妖灵！", type: .Text)
+					
+				case "/KR":
+					ZEGBotPlugin.smartReply(to: message, content: kr, type: .Sticker)
+					
+				case "#朝君ISTYPING":
+					ZEGResponse.sendSticker(to: message.chat, sticker: cjtyping, disable_notification: nil)
+					
+				case "/TAO":
+					ZEGResponse.sendPhoto(to: message.chat, photo: tao, caption: nil, disable_notification: nil)
+					
+				case "/TMVOICE":
 					do {
 						
 						let sqlite = try SQLite(DB_PATH)
 						
-						let sql = "INSERT INTO tmvoice(update_string) values ('\(request.postBodyString)');"
+						var messageQueue = [Message]()
 						
-						try sqlite.execute(sql)
-						
-						// Dev mode feedback.
-						if case 1 = mode {
+						try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id DESC LIMIT 5;") {
+							(statement: SQLiteStmt, i:Int) -> () in
 							
-							ZEGResponse.sharedInstace.stupidReply(to: update.message!, content: "嗯～")
+								
+							let fetchedUpdateObject = ZEGDecoder.decodeUpdate(statement.columnText(1))
+							
+							if let fetchedMessage = fetchedUpdateObject?.message {
+							
+								messageQueue.append(fetchedMessage)
+							
+							}
+						
 							
 						}
+						
+						if let chat = update?.message?.chat {
+							
+							while messageQueue.count != 0 {
+								
+								ZEGResponse.forwardMessage(to: chat, message: messageQueue.popLast()!, disable_notification: nil)
+								
+							}
+							
+						}
+						
 						
 					} catch let e {
 						
@@ -53,119 +121,38 @@ class ZEGHandler: RequestHandler {
 						
 					}
 					
-				}
-			
-				if let text = message.text {
+				case "/WHOSYOURDADDY":
+					mode = (mode + 1) % 2
+					if mode == 1 { print("Switched to dev mode.") }
+					else { print("Switched to normal mode.") }
 					
-					var isCommand = true
-					
-					switch text.uppercaseString {
-					
-					/* Rules go here (order sensitive). */
-					case "/学长":
-						ZEGResponse.sharedInstace.smartReply(to: message, content: "눈_눈")
-						
-					case "/JOY":
-						ZEGResponse.sharedInstace.smartReply(to: message, content: joy)
-						
-					case "/JAKE":
-						ZEGResponse.sharedInstace.smartReply(to: message, content: jake)
-						
-					case "/DUYAOO":
-						ZEGResponse.sharedInstace.smartReply(to: message, content: "哎呦喂，不得了了！妖妖灵！")
-						
-					case "/KR":
-						ZEGResponse.sharedInstace.smartReply(to: message, content: kr)
-						
-					case "#朝君ISTYPING":
-						ZEGResponse.sharedInstace.directSend(to: message, content: cjtyping)
-						
-					case "/TAO":
-						ZEGResponse.sharedInstace.directSend(to: message, content: tao)
-						
-					case "/TMVOICE":
-						do {
-							
-							let sqlite = try SQLite(DB_PATH)
-							
-							var messageQueue = [Message]()
-							
-							try sqlite.forEachRow("SELECT * FROM tmvoice ORDER BY id DESC LIMIT 5;") {
-								(statement: SQLiteStmt, i:Int) -> () in
-								
-								do {
-									
-									let fetchedUpdateObject = try TelegramDecoder.sharedInstance.decodeUpdate(statement.columnText(1))
-									
-									if let fetchedMessage = fetchedUpdateObject.message {
-									
-										messageQueue.append(fetchedMessage)
-									
-									}
-									
-								} catch let e {
-									
-									print("\(e)")
-								}
-								
-							}
-							
-							if let chat = update.message?.chat {
-								
-								while messageQueue.count != 0 {
-									
-									ZEGResponse.sharedInstace.performForward(to: chat, with: messageQueue.popLast()!)
-									
-								}
-								
-							}
-							
-							
-						} catch let e {
-							
-							print("\(e)")
-							
-						}
-						
-					case "/WHOSYOURDADDY":
-						mode = (mode + 1) % 2
-						if mode == 1 { print("Switched to dev mode.") }
-						else { print("Switched to normal mode.") }
-						
-					default:
-						isCommand = false
-						break
-						
-					}
-					
-					if isCommand {
-					
-						cuckoo = ""
-					
-					} else if text == cuckoo {
-					
-						ZEGResponse.sharedInstace.directSend(to: message, content: text)
-						cuckoo = ""
-					
-					} else {
-					
-						cuckoo = text
-						
-					}
-					
+				default:
+					isCommand = false
+					break
 					
 				}
-			
+				
+				if isCommand {
+				
+					cuckoo = ""
+				
+				} else if text == cuckoo {
+				
+					ZEGResponse.sendMessage(to: message.chat, text: "*\(text)*", parse_mode: .Markdown, disable_web_page_preview: nil, disable_notification: nil)
+					cuckoo = ""
+				
+				} else {
+				
+					cuckoo = text
+					
+				}
+				
+				
 			}
-			
-		} catch let e {
-			
-			print("\(e)")
-			
+		
 		}
 		
 		response.requestCompletedCallback()
-		
+
 	}
-	
 }
