@@ -6,13 +6,11 @@
 //  Copyright © 2016 Shane. All rights reserved.
 //
 
-import Foundation
-
 class ZEGBotPlugin {
 	
 	static func smartReply(to receiver: Message, content: Any, type: contentType) {
 	
-		var sendTo = receiver
+		var sendTo: Receivable = receiver.chat
 		if let replyTo = receiver.reply_to_message { sendTo = replyTo }
 		switch type {
 		case .Text:
