@@ -69,28 +69,28 @@ class ZEGHandler: RequestHandler {
 				switch text.uppercaseString {
 				
 				/* Rules go here (order sensitive). */
-				case "/学长":
+				case "/学长", "/学长@ZEG_BOT":
 					ZEGBotPlugin.smartReply(to: message, content: "눈_눈", type: .Text)
 					
-				case "/JOY":
+				case "/JOY", "/JOY@ZEG_BOT":
 					ZEGBotPlugin.smartReply(to: message, content: joy, type: .PhotoSize)
 					
-				case "/JAKE":
+				case "/JAKE", "/JAKE@ZEG_BOT":
 					ZEGBotPlugin.smartReply(to: message, content: jake, type: .PhotoSize)
 					
-				case "/DUYAOO":
+				case "/DUYAOO", "/DUYAOO@ZEG_BOT":
 					ZEGBotPlugin.smartReply(to: message, content: "哎呦喂，不得了了！妖妖灵！", type: .Text)
 					
-				case "/KR":
+				case "/KR", "/KR@ZEG_BOT":
 					ZEGBotPlugin.smartReply(to: message, content: kr, type: .Sticker)
 					
 				case "#朝君ISTYPING":
 					ZEGResponse.sendSticker(to: message.chat, sticker: cjtyping, disable_notification: nil)
 					
-				case "/TAO":
+				case "/TAO", "/TAO@ZEG_BOT":
 					ZEGResponse.sendPhoto(to: message.chat, photo: tao, caption: nil, disable_notification: nil)
 					
-				case "/TMVOICE":
+				case "/TMVOICE", "/TMVOICE@ZEG_BOT":
 					do {
 						
 						let sqlite = try SQLite(DB_PATH)
@@ -130,6 +130,7 @@ class ZEGHandler: RequestHandler {
 					}
 					
 				case "/WHOSYOURDADDY":
+					guard message.from?.id == shane else { break }
 					mode = (mode + 1) % 2
 					if mode == 1 { print("Switched to dev mode.") }
 					else { print("Switched to normal mode.") }
