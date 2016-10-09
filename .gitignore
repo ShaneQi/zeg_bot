@@ -1,1 +1,6 @@
-token.swift
+secret.swift
+
+.DS_Store
+/.build
+/Packages
+/*.xcodeproj
