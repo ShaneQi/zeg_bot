@@ -33,7 +33,20 @@ struct Post: DatabaseManaged {
 
 	var children: [Post]?
 
-	var isFault: Bool { return children == nil }
+	mutating func dig(into database: SQLite) throws {
+		guard children == nil else { return }
+		self.children = []
+		try database.forEachRow(
+			statement: "SELECT `child_uid` FROM `post_post` WHERE `parent_uid` = 107026 ORDER BY `child_uid` ASC;",
+			doBindings: { statement in
+				try statement.bind(position: 1, uid)
+		}, handleRow: { statement, _ in
+			let childUid = statement.columnInt(position: 0)
+			if let post = try Post.find(uid: childUid, from: database) {
+				children?.append(post)
+			}
+		})
+	}
 
 }
 
@@ -61,19 +74,35 @@ extension Post {
 
 extension Post {
 
-	static func get(primaryKeyValue: String, from database: SQLite) throws -> Post? {
+	static func roots(from database: SQLite) throws -> [Post] {
+		var posts = [Post]()
+		try database.forEachRow(
+		statement: "SELECT * FROM `posts` WHERE `uid` NOT IN (SELECT `child_uid` FROM `post_post`);") {
+			statement, _ in
+			let uid = statement.columnInt(position: 0)
+			let content = statement.columnText(position: 1)
+			let senderId = statement.columnInt(position: 2)
+			let updatedAt = statement.columnInt(position: 3)
+			posts.append(Post(uid: uid, content: content, senderId: senderId, updatedAt: updatedAt, parentUid: nil, children: nil))
+		}
+		return posts
+	}
+
+	static func find(uid: Int, from database: SQLite) throws -> Post? {
 		var post: Post?
 		try database.forEachRow(
 			statement: "SELECT * FROM `posts` WHERE `uid` = :1;",
 			doBindings: { statement in
-				try statement.bind(position: 1, primaryKeyValue)
-		},
-			handleRow: { statement, _ in
-//				post = Post(uid: statement.columnInt(position: 1), content: statement.columnText(position: 0), parentUid: nil)
+				try statement.bind(position: 1, uid)
+		}, handleRow: { statement, _ in
+			let uid = statement.columnInt(position: 0)
+			let content = statement.columnText(position: 1)
+			let senderId = statement.columnInt(position: 2)
+			let updatedAt = statement.columnInt(position: 3)
+			post = Post(uid: uid, content: content, senderId: senderId, updatedAt: updatedAt, parentUid: nil, children: nil)
 		})
+		try post?.dig(into: database)
 		return post
 	}
-
-	static func getAll(from database: SQLite) throws -> [Post] { return [] }
 
 }
