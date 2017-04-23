@@ -63,7 +63,7 @@ extension Post {
 		})
 		guard let parentUid = self.parentUid else { return }
 		try database.execute(
-			statement: "INSERT INTO `post_post` VALUES (:1, :2);",
+			statement: "REPLACE INTO `post_post` VALUES (:1, :2);",
 			doBindings: { statement in
 				try statement.bind(position: 1, parentUid)
 				try statement.bind(position: 2, uid)
@@ -74,19 +74,19 @@ extension Post {
 
 extension Post {
 
-	static func roots(from database: SQLite) throws -> [Post] {
-		var posts = [Post]()
-		try database.forEachRow(
-		statement: "SELECT * FROM `posts` WHERE `uid` NOT IN (SELECT `child_uid` FROM `post_post`);") {
-			statement, _ in
-			let uid = statement.columnInt(position: 0)
-			let content = statement.columnText(position: 1)
-			let senderId = statement.columnInt(position: 2)
-			let updatedAt = statement.columnInt(position: 3)
-			posts.append(Post(uid: uid, content: content, senderId: senderId, updatedAt: updatedAt, parentUid: nil, children: nil))
-		}
-		return posts
-	}
+//	static func roots(from database: SQLite) throws -> [Post] {
+//		var posts = [Post]()
+//		try database.forEachRow(
+//		statement: "SELECT * FROM `posts` WHERE `uid` NOT IN (SELECT `child_uid` FROM `post_post`);") {
+//			statement, _ in
+//			let uid = statement.columnInt(position: 0)
+//			let content = statement.columnText(position: 1)
+//			let senderId = statement.columnInt(position: 2)
+//			let updatedAt = statement.columnInt(position: 3)
+//			posts.append(Post(uid: uid, content: content, senderId: senderId, updatedAt: updatedAt, parentUid: nil, children: nil))
+//		}
+//		return posts
+//	}
 
 	static func find(uid: Int, from database: SQLite) throws -> Post? {
 		var post: Post?
