@@ -27,10 +27,9 @@ class ZEGBotPlugin {
 		case .Text:
 			bot.send(message: (content as! String), to: sendTo)
 		case .PhotoSize:
-			let x = bot.send(photo: (content as! PhotoSize), to: sendTo)
-			print(x)
+			bot.send(photo: (content as! PhotoSize), to: sendTo)
 		case .Sticker:
-			let _ = bot.send(sticker: (content as! Sticker), to: sendTo)
+			bot.send(sticker: (content as! Sticker), to: sendTo)
 		}
 		
 	}

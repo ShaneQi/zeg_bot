@@ -62,9 +62,6 @@ bot.run { update, bot in
 			case "#朝君ISTYPING":
 				let _ = bot.send(sticker: cjtyping, to: message.chat)
 
-			case "/TAO", "/TAO@ZEG_BOT":
-				let _ = bot.send(photo: tao, to: message.chat)
-
 			case "/WHOSYOURDADDY":
 				guard message.from?.id == shane else { break }
 				mode = (mode + 1) % 2
