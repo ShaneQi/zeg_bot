@@ -1,5 +1,10 @@
 import ZEGBot
 import SQLite
+import PerfectCURL
+import cURL
+import Foundation
+import SwiftyJSON
+import PerfectLib
 
 let bot = ZEGBot(token: secret)
 let db = try! SQLite.init(in: "./zeg_bot.db",
@@ -16,6 +21,38 @@ bot.run { update, bot in
 
 	if let message = update.message {
 
+		if let photo = message.photo?.last,
+			let filePath = bot.getFile(ofId: photo.file_id)?.filePath {
+			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
+			var fileUrlBytes = [UInt8](fileUrl.utf8)
+			let faceDetectionCurl = CURL()
+			faceDetectionCurl.url = "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1"
+			faceDetectionCurl.setOption(CURLOPT_POSTFIELDS, v: &fileUrlBytes)
+			faceDetectionCurl.setOption(CURLOPT_HTTPHEADER, s: "Content-Type: application/json")
+			faceDetectionCurl.setOption(CURLOPT_HTTPHEADER, s: "Authorization: Simple \(algorithmiaApiKey)")
+			let json = JSON(data: Data(bytes: faceDetectionCurl.performFully().2))
+			let hasFace = !json["result"].arrayValue.isEmpty
+			var fileName = "\(message.message_id)"
+			if let extensionCharacters = filePath.characters.split(separator: ".").last {
+				fileName += ".\(String(extensionCharacters))"
+			}
+			var fileSavePath = filesPath + "photos/"
+			if hasFace { fileSavePath += "faces/" }
+			let dir = Dir(fileSavePath)
+			do {
+				if !dir.exists { try dir.create() }
+				let file = PerfectLib.File(fileSavePath + fileName)
+				let downloadFileCurl = CURL()
+				downloadFileCurl.url = "https://api.telegram.org/file/bot\(secret)/" + filePath
+				try file.open(.readWrite)
+				let _ = try file.write(bytes: downloadFileCurl.performFully().2)
+				file.close()
+				if hasFace { bot.send(message: "Gotcha!", to: message) }
+			} catch(let error) {
+				Log.error(message: "Failed to save file to \(fileSavePath + fileName), because \(error).")
+			}
+		}
+
 		if let senderId = message.from?.id {
 			let post = Post(uid: message.message_id,
 			                content: message.text ?? "[attachment]",
@@ -24,7 +61,6 @@ bot.run { update, bot in
 			                parentUid: message.reply_to_message?.message_id,
 			                children: nil)
 			do { try post.replace(into: db) } catch { print("error:") }
-			dump(post)
 		}
 
 		if let locationA = message.location,

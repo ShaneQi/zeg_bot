@@ -71,3 +71,27 @@ enum contentType {
 	case Sticker
 	
 }
+
+extension PhotoSize {
+
+	init(file_id: String, width: Int, height: Int) {
+		self.file_id = file_id
+		self.width = width
+		self.height = height
+		self.file_size = nil
+	}
+
+}
+
+extension Sticker {
+
+	init(file_id: String, width: Int, height: Int) {
+		self.file_id = file_id
+		self.width = width
+		self.height = height
+		self.file_size = nil
+		self.thumb = nil
+		self.emoji = nil
+	}
+	
+}
