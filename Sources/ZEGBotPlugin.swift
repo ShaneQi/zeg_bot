@@ -3,7 +3,7 @@
 //  zeg_bot
 //
 //  Created by Shane Qi on 6/4/16.
-//  Copyright © 2016 Shane. All rights reserved.
+//
 //
 
 #if os(Linux)

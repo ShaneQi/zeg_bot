@@ -1,3 +1,11 @@
+//
+//  main.swift
+//  zeg_bot
+//
+//  Created by Shane Qi on 6/4/16.
+//
+//
+
 import ZEGBot
 import SQLite
 import PerfectCURL
