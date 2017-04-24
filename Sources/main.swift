@@ -40,10 +40,7 @@ bot.run { update, bot in
 			faceDetectionCurl.setOption(CURLOPT_HTTPHEADER, s: "Authorization: Simple \(algorithmiaApiKey)")
 			let json = JSON(data: Data(bytes: faceDetectionCurl.performFully().2))
 			let hasFace = !json["result"].arrayValue.isEmpty
-			var fileName = "\(message.message_id)"
-			if let extensionCharacters = filePath.characters.split(separator: ".").last {
-				fileName += ".\(String(extensionCharacters))"
-			}
+			var fileName = "\(message.message_id).jpg"
 			var fileSavePath = filesPath + "photos/"
 			if hasFace { fileSavePath += "faces/" }
 			let dir = Dir(fileSavePath)
