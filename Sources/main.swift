@@ -52,7 +52,7 @@ bot.run { update, bot in
 				let file = PerfectLib.File(fileSavePath + fileName)
 				let downloadFileCurl = CURL()
 				downloadFileCurl.url = "https://api.telegram.org/file/bot\(secret)/" + filePath
-				try file.open(.readWrite)
+				try file.open(.readWrite, permissions: [.rwxUser, .rxGroup, .rxOther])
 				let _ = try file.write(bytes: downloadFileCurl.performFully().2)
 				file.close()
 				if hasFace { bot.send(message: "Gotcha!", to: message) }
