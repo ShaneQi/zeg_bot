@@ -7,6 +7,7 @@
 //
 
 import SQLite
+import ZEGBot
 
 struct Post: DatabaseManaged {
 
@@ -113,6 +114,40 @@ extension Post {
 		})
 		try post?.dig(into: database)
 		return post
+	}
+
+}
+
+
+extension User: DatabaseManaged {
+
+	static var tableCreatingStatement: [String] = [
+		"CREATE TABLE IF NOT EXISTS `users` (" +
+			"`uid` INTEGER NOT NULL UNIQUE," +
+			"`firstname` TEXT NOT NULL," +
+			"`lastname` TEXT," +
+			"`username` TEXT," +
+			"PRIMARY KEY(`uid`)" +
+		");"
+	]
+
+	func replace(into database: SQLite) throws {
+		try database.execute(
+			statement: "REPLACE INTO `users` VALUES (:1, :2, :3, :4);",
+			doBindings: { statement in
+				try statement.bind(position: 1, id)
+				try statement.bind(position: 2, first_name)
+				if let lastname = last_name {
+					try statement.bind(position: 3, lastname)
+				} else {
+					try statement.bindNull(position: 3)
+				}
+				if let username = username {
+					try statement.bind(position: 4, username)
+				} else {
+					try statement.bindNull(position: 4)
+				}
+		})
 	}
 
 }

@@ -16,7 +16,8 @@ import PerfectLib
 
 let bot = ZEGBot(token: secret)
 let db = try! SQLite.init(in: dbPath,
-                          managing: [Post.self])
+                          managing: [Post.self,
+                                     User.self])
 
 var cuckoo = ""
 var mode = 0
@@ -28,6 +29,10 @@ bot.run { update, bot in
 	if case 1 = mode { print(update) }
 
 	if let message = update.message {
+
+		if let user = message.from {
+			try? user.replace(into: db)
+		}
 
 		if let photo = message.photo?.last,
 			let filePath = bot.getFile(ofId: photo.file_id)?.filePath {
