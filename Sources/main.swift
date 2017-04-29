@@ -15,7 +15,7 @@ import SwiftyJSON
 import PerfectLib
 
 let bot = ZEGBot(token: secret)
-let db = try! SQLite.init(in: "./zeg_bot.db",
+let db = try! SQLite.init(in: dbPath,
                           managing: [Post.self])
 
 var cuckoo = ""
@@ -41,31 +41,44 @@ bot.run { update, bot in
 			let json = JSON(data: Data(bytes: faceDetectionCurl.performFully().2))
 			let hasFace = !json["result"].arrayValue.isEmpty
 			var fileName = "\(message.message_id).jpg"
-			var fileSavePath = filesPath + "photos/"
-			if hasFace { fileSavePath += "faces/" }
-			let dir = Dir(fileSavePath)
+			var fileSaveRelativePath = "photos/"
+			if hasFace { fileSaveRelativePath += "faces/" }
+			let fileObsolutePath = filesPath + fileSaveRelativePath
+			let dir = Dir(fileObsolutePath)
 			do {
 				if !dir.exists { try dir.create() }
-				let file = PerfectLib.File(fileSavePath + fileName)
+				let file = PerfectLib.File(fileObsolutePath + fileName)
 				let downloadFileCurl = CURL()
 				downloadFileCurl.url = "https://api.telegram.org/file/bot\(secret)/" + filePath
 				try file.open(.readWrite, permissions: [.rwxUser, .rxGroup, .rxOther])
 				let _ = try file.write(bytes: downloadFileCurl.performFully().2)
 				file.close()
 				if hasFace { bot.send(message: "Gotcha!", to: message) }
+				if let senderId = message.from?.id {
+					let post = Post(uid: message.message_id,
+					                content: fileSaveRelativePath + fileName,
+					                senderId: senderId,
+					                updatedAt: message.date,
+					                parentUid: message.reply_to_message?.message_id,
+					                type: .photo,
+					                children: nil)
+					try post.replace(into: db)
+				}
 			} catch(let error) {
-				Log.error(message: "Failed to save file to \(fileSavePath + fileName), because \(error).")
+				Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
 			}
 		}
 
-		if let senderId = message.from?.id {
+		if let senderId = message.from?.id,
+			let text = message.text {
 			let post = Post(uid: message.message_id,
-			                content: message.text ?? "[attachment]",
+			                content: text,
 			                senderId: senderId,
 			                updatedAt: message.date,
 			                parentUid: message.reply_to_message?.message_id,
+			                type: .text,
 			                children: nil)
-			do { try post.replace(into: db) } catch { print("error:") }
+			do { try post.replace(into: db) } catch (let error) { print("error: \(error)") }
 		}
 
 		if let locationA = message.location,

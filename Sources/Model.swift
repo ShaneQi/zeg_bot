@@ -21,6 +21,7 @@ struct Post: DatabaseManaged {
 		"CREATE TABLE IF NOT EXISTS `post_post` (" +
 			"`parent_uid` INTEGER NOT NULL," +
 			"`child_uid` INTEGER NOT NULL UNIQUE," +
+			"`type` INTEGER NOT NULL," +
 			"PRIMARY KEY(`parent_uid`,`child_uid`)" +
 		");",
 		]
@@ -30,8 +31,14 @@ struct Post: DatabaseManaged {
 	var senderId: Int
 	var updatedAt: Int
 	var parentUid: Int?
+	var type: PostType
 
 	var children: [Post]?
+
+	enum PostType: Int {
+		case text = 0
+		case photo
+	}
 
 	mutating func dig(into database: SQLite) throws {
 		guard children == nil else { return }
@@ -54,12 +61,13 @@ extension Post {
 
 	func replace(into database: SQLite) throws {
 		try database.execute(
-			statement: "REPLACE INTO `posts` VALUES (:1, :2, :3, :4);",
+			statement: "REPLACE INTO `posts` VALUES (:1, :2, :3, :4, :5);",
 			doBindings: { statement in
 				try statement.bind(position: 1, uid)
 				try statement.bind(position: 2, content)
 				try statement.bind(position: 3, senderId)
 				try statement.bind(position: 4, updatedAt)
+				try statement.bind(position: 5, type.rawValue)
 		})
 		guard let parentUid = self.parentUid else { return }
 		try database.execute(
@@ -99,7 +107,9 @@ extension Post {
 			let content = statement.columnText(position: 1)
 			let senderId = statement.columnInt(position: 2)
 			let updatedAt = statement.columnInt(position: 3)
-			post = Post(uid: uid, content: content, senderId: senderId, updatedAt: updatedAt, parentUid: nil, children: nil)
+			let typeRawValue = statement.columnInt(position: 4)
+			let type = PostType(rawValue: typeRawValue) ?? .text
+			post = Post(uid: uid, content: content, senderId: senderId, updatedAt: updatedAt, parentUid: nil, type: type, children: nil)
 		})
 		try post?.dig(into: database)
 		return post
