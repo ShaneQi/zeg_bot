@@ -11,16 +11,48 @@ import SQLite
 import Foundation
 import SwiftyJSON
 import PerfectLib
+import Kanna
 
 let bot = ZEGBot(token: secret)
-let db = try! SQLite.init(in: dbPath,
-                          managing: [Post.self,
-                                     User.self])
+let db = try! SQLite.init(
+	in: dbPath,
+	managing: [Post.self,
+	           User.self])
 
 var cuckoo = ""
 var mode = 0
+var lastJobsCheckingDay = 0
 
 bot.run { update, bot in
+
+	let secondsOfTheDay = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: 86400)
+	let daySince1970 = Int(Date().timeIntervalSince1970 / 86400)
+	if daySince1970 - lastJobsCheckingDay > 1 ||
+		(daySince1970 - lastJobsCheckingDay > 0 && secondsOfTheDay > 60 * 60 * 17) {
+		lastJobsCheckingDay = daySince1970
+		var departments = [Department]()
+		let urlRequest = URLRequest(url: URL(string: "https://careers.jobscore.com/careers/bottlerocket")!)
+		let session = URLSession(configuration: URLSessionConfiguration.default)
+		session.dataTask(with: urlRequest) { data, _, _ in
+			if let data = data,
+				let content = String(data: data, encoding: String.Encoding.utf8),
+				let doc = HTML(html: content, encoding: .utf8),
+				let jobList = doc.xpath("//div[@class='js-area-container js-section-job-list']").first {
+				let departmentElements = jobList.xpath(".//div[@class='js-job-departament-container']")
+				for departmentElement in departmentElements {
+					var department = Department(
+						name: departmentElement.xpath(".//div[@class='js-job-department']").first?.text)
+					for jobElement in departmentElement.xpath(".//div[@class='js-job-container']") {
+						department.jobs.append(Job(
+							title: jobElement.xpath(".//span[@class='js-job-title']").first?.text,
+							location: jobElement.xpath(".//span[@class='js-job-location']").first?.text))
+					}
+					departments.append(department)
+				}
+			}
+			bot.send(message: departments.map { "\($0)" }.joined(separator: "\n"), to: shaneChat)
+		}.resume()
+	}
 
 	let plugin = ZEGBotPlugin(bot: bot)
 
@@ -73,11 +105,11 @@ bot.run { update, bot in
 						} catch(let error) {
 							Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
 						}
-					}.resume()
+						}.resume()
 				} catch(let error) {
 					Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
 				}
-			}.resume()
+				}.resume()
 		}
 
 		if let senderId = message.from?.id,
@@ -147,11 +179,11 @@ bot.run { update, bot in
 
 				bot.send(message: "*\(text)*", to: message.chat, parseMode: .markdown)
 				cuckoo = ""
-
+				
 			} else {
-
+				
 				cuckoo = text
-
+				
 			}
 			
 		}

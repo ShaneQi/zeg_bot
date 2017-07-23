@@ -2,6 +2,12 @@
   "autoPin": true,
   "pins": [
     {
+      "package": "Kanna",
+      "reason": null,
+      "repositoryURL": "https://github.com/tid-kijyun/Kanna.git",
+      "version": "2.2.1"
+    },
+    {
       "package": "PerfectLib",
       "reason": null,
       "repositoryURL": "https://github.com/PerfectlySoft/PerfectLib.git",
@@ -18,6 +24,12 @@
       "reason": null,
       "repositoryURL": "https://github.com/PerfectlySoft/Perfect-sqlite3-support.git",
       "version": "2.0.1"
+    },
+    {
+      "package": "SwiftClibxml2",
+      "reason": null,
+      "repositoryURL": "https://github.com/tid-kijyun/SwiftClibxml2.git",
+      "version": "1.0.2"
     },
     {
       "package": "SwiftyJSON",

@@ -5,6 +5,7 @@ let package = Package(
 	dependencies: [
 		.Package(url: "https://github.com/shaneqi/ZEGBot.git", majorVersion: 2),
 		.Package(url: "https://github.com/PerfectlySoft/PerfectLib.git", majorVersion: 2),
-		.Package(url: "https://github.com/PerfectlySoft/Perfect-SQLite.git", majorVersion: 2)
+		.Package(url: "https://github.com/PerfectlySoft/Perfect-SQLite.git", majorVersion: 2),
+		.Package(url: "https://github.com/tid-kijyun/Kanna.git", majorVersion: 2)
 	]
 )
