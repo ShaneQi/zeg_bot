@@ -3,7 +3,7 @@
 //  zeg_bot
 //
 //  Created by Shane Qi on 6/4/16.
-//  Copyright © 2016 Shane. All rights reserved.
+//
 //
 
 #if os(Linux)
@@ -22,15 +22,14 @@ class ZEGBotPlugin {
 	func smartReply(to receiver: Message, content: Any, type: contentType) {
 		
 		var sendTo: Sendable = receiver.chat
-		if let replyTo = receiver.reply_to_message { sendTo = replyTo }
+		if let replyTo = receiver.replyToMessage { sendTo = replyTo }
 		switch type {
 		case .Text:
 			bot.send(message: (content as! String), to: sendTo)
 		case .PhotoSize:
-			let x = bot.send(photo: (content as! PhotoSize), to: sendTo)
-			print(x)
+			bot.send(photo: (content as! PhotoSize), to: sendTo)
 		case .Sticker:
-			let _ = bot.send(sticker: (content as! Sticker), to: sendTo)
+			bot.send(sticker: (content as! Sticker), to: sendTo)
 		}
 		
 	}
@@ -70,5 +69,29 @@ enum contentType {
 	case Text
 	case PhotoSize
 	case Sticker
+	
+}
+
+extension PhotoSize {
+
+	init(file_id: String, width: Int, height: Int) {
+		self.fileId = file_id
+		self.width = width
+		self.height = height
+		self.fileSize = nil
+	}
+
+}
+
+extension Sticker {
+
+	init(file_id: String, width: Int, height: Int) {
+		self.fileId = file_id
+		self.width = width
+		self.height = height
+		self.fileSize = nil
+		self.thumb = nil
+		self.emoji = nil
+	}
 	
 }
