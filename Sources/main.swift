@@ -32,47 +32,53 @@ bot.run { update, bot in
 			try? user.replace(into: db)
 		}
 
-		/*
 		if let photo = message.photo?.last,
-			let filePath = bot.getFile(ofId: photo.file_id)?.filePath {
+			let filePath = bot.getFile(ofId: photo.fileId)?.filePath {
 			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
-			var fileUrlBytes = [UInt8](fileUrl.utf8)
-			let faceDetectionCurl = CURL()
-			faceDetectionCurl.url = "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1"
-			faceDetectionCurl.setOption(CURLOPT_POSTFIELDS, v: &fileUrlBytes)
-			faceDetectionCurl.setOption(CURLOPT_HTTPHEADER, s: "Content-Type: application/json")
-			faceDetectionCurl.setOption(CURLOPT_HTTPHEADER, s: "Authorization: Simple \(algorithmiaApiKey)")
-			let json = JSON(data: Data(bytes: faceDetectionCurl.performFully().2))
-			let hasFace = !json["result"].arrayValue.isEmpty
-			var fileName = "\(message.message_id).jpg"
-			var fileSaveRelativePath = "photos/"
-			if hasFace { fileSaveRelativePath += "faces/" }
-			let fileObsolutePath = filesPath + fileSaveRelativePath
-			let dir = Dir(fileObsolutePath)
-			do {
-				if !dir.exists { try dir.create() }
-				let file = PerfectLib.File(fileObsolutePath + fileName)
-				let downloadFileCurl = CURL()
-				downloadFileCurl.url = "https://api.telegram.org/file/bot\(secret)/" + filePath
-				try file.open(.readWrite, permissions: [.rwxUser, .rxGroup, .rxOther])
-				let _ = try file.write(bytes: downloadFileCurl.performFully().2)
-				file.close()
-				if hasFace { bot.send(message: "Gotcha!", to: message) }
-				if let senderId = message.from?.id {
-					let post = Post(uid: message.message_id,
-					                content: fileSaveRelativePath + fileName,
-					                senderId: senderId,
-					                updatedAt: message.date,
-					                parentUid: message.reply_to_message?.message_id,
-					                type: .photo,
-					                children: nil)
-					try post.replace(into: db)
+			//var fileUrlBytes = [UInt8](fileUrl.utf8)
+			var request = URLRequest(url: URL(string: "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1")!)
+			request.httpBody = fileUrl.data(using: .utf8)
+			request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+			request.addValue("Simple \(algorithmiaApiKey)", forHTTPHeaderField: "Authorization")
+			URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
+				guard let data = data else { return }
+				let json = JSON(data: data)
+				let hasFace = !json["result"].arrayValue.isEmpty
+				var fileName = "\(message.messageId).jpg"
+				var fileSaveRelativePath = "photos/"
+				if hasFace { fileSaveRelativePath += "faces/" }
+				let fileObsolutePath = filesPath + fileSaveRelativePath
+				let dir = Dir(fileObsolutePath)
+				do {
+					if !dir.exists { try dir.create() }
+					let file = PerfectLib.File(fileObsolutePath + fileName)
+					let request = URLRequest(url: URL(string: "https://api.telegram.org/file/bot\(secret)/" + filePath)!)
+					URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
+						do {
+							guard let data = data else { return }
+							try file.open(.readWrite, permissions: [.rwxUser, .rxGroup, .rxOther])
+							let _ = try file.write(bytes: [UInt8](data))
+							file.close()
+							if hasFace { bot.send(message: "Gotcha!", to: message) }
+							if let senderId = message.from?.id {
+								let post = Post(uid: message.messageId,
+								                content: fileSaveRelativePath + fileName,
+								                senderId: senderId,
+								                updatedAt: message.date,
+								                parentUid: message.replyToMessage?.messageId,
+								                type: .photo,
+								                children: nil)
+								try post.replace(into: db)
+							}
+						} catch(let error) {
+							Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
+						}
+					}.resume()
+				} catch(let error) {
+					Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
 				}
-			} catch(let error) {
-				Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
-			}
+			}.resume()
 		}
-		*/
 
 		if let senderId = message.from?.id,
 			let text = message.text {
