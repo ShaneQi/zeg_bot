@@ -8,8 +8,6 @@
 
 import ZEGBot
 import SQLite
-import PerfectCURL
-import cURL
 import Foundation
 import SwiftyJSON
 import PerfectLib
@@ -34,6 +32,7 @@ bot.run { update, bot in
 			try? user.replace(into: db)
 		}
 
+		/*
 		if let photo = message.photo?.last,
 			let filePath = bot.getFile(ofId: photo.file_id)?.filePath {
 			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
@@ -73,22 +72,23 @@ bot.run { update, bot in
 				Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
 			}
 		}
+		*/
 
 		if let senderId = message.from?.id,
 			let text = message.text {
-			let post = Post(uid: message.message_id,
+			let post = Post(uid: message.messageId,
 			                content: text,
 			                senderId: senderId,
 			                updatedAt: message.date,
-			                parentUid: message.reply_to_message?.message_id,
+			                parentUid: message.replyToMessage?.messageId,
 			                type: .text,
 			                children: nil)
 			do { try post.replace(into: db) } catch (let error) { print("error: \(error)") }
 		}
 
 		if let locationA = message.location,
-			let locationB = message.reply_to_message?.location,
-			let userB = message.reply_to_message?.from?.first_name {
+			let locationB = message.replyToMessage?.location,
+			let userB = message.replyToMessage?.from?.firstName {
 
 			let distance = Int(plugin.distance(between: locationA, and: locationB))
 
@@ -139,7 +139,7 @@ bot.run { update, bot in
 
 			} else if text == cuckoo {
 
-				bot.send(message: "*\(text)*", to: message.chat, parseMode: .MARKDOWN)
+				bot.send(message: "*\(text)*", to: message.chat, parseMode: .markdown)
 				cuckoo = ""
 
 			} else {

@@ -136,8 +136,8 @@ extension User: DatabaseManaged {
 			statement: "REPLACE INTO `users` VALUES (:1, :2, :3, :4);",
 			doBindings: { statement in
 				try statement.bind(position: 1, id)
-				try statement.bind(position: 2, first_name)
-				if let lastname = last_name {
+				try statement.bind(position: 2, firstName)
+				if let lastname = lastName {
 					try statement.bind(position: 3, lastname)
 				} else {
 					try statement.bindNull(position: 3)

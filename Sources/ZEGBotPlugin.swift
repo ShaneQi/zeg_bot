@@ -22,7 +22,7 @@ class ZEGBotPlugin {
 	func smartReply(to receiver: Message, content: Any, type: contentType) {
 		
 		var sendTo: Sendable = receiver.chat
-		if let replyTo = receiver.reply_to_message { sendTo = replyTo }
+		if let replyTo = receiver.replyToMessage { sendTo = replyTo }
 		switch type {
 		case .Text:
 			bot.send(message: (content as! String), to: sendTo)
@@ -75,10 +75,10 @@ enum contentType {
 extension PhotoSize {
 
 	init(file_id: String, width: Int, height: Int) {
-		self.file_id = file_id
+		self.fileId = file_id
 		self.width = width
 		self.height = height
-		self.file_size = nil
+		self.fileSize = nil
 	}
 
 }
@@ -86,10 +86,10 @@ extension PhotoSize {
 extension Sticker {
 
 	init(file_id: String, width: Int, height: Int) {
-		self.file_id = file_id
+		self.fileId = file_id
 		self.width = width
 		self.height = height
-		self.file_size = nil
+		self.fileSize = nil
 		self.thumb = nil
 		self.emoji = nil
 	}
