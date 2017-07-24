@@ -1,7 +1,10 @@
+SCRIPT=`readlink -f "$0"`
+SCRIPTPATH=`dirname "$SCRIPT"`
+PROJPATH=`dirname "$SCRIPTPATH"`
 docker run \
 -d \
 --name zeg_bot \
--v `pwd`/:/zeg_bot \
+-v $PROJPATH/:/zeg_bot \
 -v /home/shane/persistence/zeg_bot/:/db/ \
 -v /home/shane/persistence/telepost/:/telepost/ \
 -w /zeg_bot \
