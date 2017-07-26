@@ -13,6 +13,5 @@ swift:3.1.0 \
 "\
 apt-get update;\
 apt-get install libxml2-dev uuid-dev libsqlite3-dev -y;\
-swift build;\
-./.build/debug/zeg_bot;\
+swift build && ./.build/debug/zeg_bot;\
 "
