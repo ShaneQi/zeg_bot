@@ -24,11 +24,11 @@ var mode = 0
 var lastJobsCheckingDay = 0
 
 bot.run { update, bot in
-
-	let secondsOfTheDay = Date().timeIntervalSince1970.truncatingRemainder(dividingBy: 86400)
-	let daySince1970 = Int(Date().timeIntervalSince1970 / 86400)
+	let secondsSince1970 = Date().timeIntervalSince1970 - 5 * 60 * 60
+	let secondsOfTheDay = secondsSince1970.truncatingRemainder(dividingBy: 86400)
+	let daySince1970 = Int(secondsSince1970 / 86400)
 	if daySince1970 - lastJobsCheckingDay > 1 ||
-		(daySince1970 - lastJobsCheckingDay > 0 && secondsOfTheDay > 60 * 60 * 17) {
+		(daySince1970 - lastJobsCheckingDay > 0 && secondsOfTheDay > 60 * 60 * 12) {
 		lastJobsCheckingDay = daySince1970
 		var departments = [Department]()
 		let urlRequest = URLRequest(url: URL(string: "https://careers.jobscore.com/careers/bottlerocket")!)
