@@ -20,22 +20,7 @@ struct Job: CustomStringConvertible {
 	}
 
 	public var description: String {
-		return "\(title ?? "UNKNOWN_TITLE") - \(location ?? "UNKNOWN_LOCATION")"
-	}
-
-}
-
-struct Department: CustomStringConvertible {
-	let name: String?
-	var jobs: [Job]
-
-	init(name: String?) {
-		self.name = name?.trimmingCharacters(in: ["\n"])
-		jobs = []
-	}
-
-	public var description: String {
-		return "\(name ?? "UNKNOWN_DEPARTMENT")\n" + jobs.map({ "\($0)" }).joined(separator: "\n") + "\n"
+		return "*\(title ?? "UNKNOWN_TITLE")* - \(location ?? "UNKNOWN_LOCATION")"
 	}
 
 }
