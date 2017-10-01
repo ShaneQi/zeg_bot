@@ -25,15 +25,6 @@ var lastJobsCheckingDay = 0
 
 bot.run { update, bot in
 
-	let secondsSince1970 = Date().timeIntervalSince1970 - 5 * 60 * 60
-	let secondsOfTheDay = secondsSince1970.truncatingRemainder(dividingBy: 86400)
-	let daySince1970 = Int(secondsSince1970 / 86400)
-	if daySince1970 - lastJobsCheckingDay > 1 ||
-		(daySince1970 - lastJobsCheckingDay > 0 && secondsOfTheDay > 60 * 60 * 12) {
-		lastJobsCheckingDay = daySince1970
-		plugin.syncBRJobs(filterNew: true)
-	}
-
 	if case 1 = mode { print(update) }
 
 	if let message = update.message {
@@ -136,10 +127,6 @@ bot.run { update, bot in
 
 			case "#朝君ISTYPING":
 				let _ = bot.send(sticker: cjtyping, to: message.chat)
-
-			case "/BRJOBS":
-				guard message.from?.id == shane else { break }
-				plugin.syncBRJobs(filterNew: false)
 
 			case "/BLOG":
 				guard message.from?.id == shane else { break }
