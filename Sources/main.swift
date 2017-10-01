@@ -138,7 +138,12 @@ bot.run { update, bot in
 				let _ = bot.send(sticker: cjtyping, to: message.chat)
 
 			case "/BRJOBS":
+				guard message.from?.id == shane else { break }
 				plugin.syncBRJobs(filterNew: false)
+
+			case "/BLOG":
+				guard message.from?.id == shane else { break }
+				plugin.refreshBlog()			
 
 			case "/WHOSYOURDADDY":
 				guard message.from?.id == shane else { break }
