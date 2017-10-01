@@ -17,12 +17,12 @@ struct Post: DatabaseManaged {
 			"`content` TEXT NOT NULL," +
 			"`sender_id` INTEGER NOT NULL," +
 			"`updated_at` INTEGER NOT NULL," +
+			"`type` INTEGER NOT NULL," +
 			"PRIMARY KEY(`uid`)" +
 		");",
 		"CREATE TABLE IF NOT EXISTS `post_post` (" +
 			"`parent_uid` INTEGER NOT NULL," +
 			"`child_uid` INTEGER NOT NULL UNIQUE," +
-			"`type` INTEGER NOT NULL," +
 			"PRIMARY KEY(`parent_uid`,`child_uid`)" +
 		");",
 		]
