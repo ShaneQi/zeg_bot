@@ -20,17 +20,17 @@ class ZEGBotPlugin {
 	
 	init(bot: ZEGBot) { self.bot = bot }
 	
-	func smartReply(to receiver: Message, content: Any, type: contentType) {
+	func smartReply(to receiver: Message, content: String, type: contentType) {
 		
 		var sendTo: Sendable = receiver.chat
 		if let replyTo = receiver.replyToMessage { sendTo = replyTo }
 		switch type {
 		case .Text:
-			bot.send(message: (content as! String), to: sendTo)
+			bot.send(message: content, to: sendTo)
 		case .PhotoSize:
-			bot.send(photo: (content as! PhotoSize), to: sendTo)
+			bot.send(photo: content, to: sendTo)
 		case .Sticker:
-			bot.send(sticker: (content as! Sticker), to: sendTo)
+			bot.send(sticker: content, to: sendTo)
 		}
 		
 	}
