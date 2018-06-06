@@ -128,10 +128,6 @@ bot.run { update, bot in
 			case "#朝君ISTYPING":
 				let _ = bot.send(sticker: cjtyping, to: message.chat)
 
-			case "/BLOG":
-				guard message.from?.id == shane else { break }
-				plugin.refreshBlog()			
-
 			case "/WHOSYOURDADDY":
 				guard message.from?.id == shane else { break }
 				mode = (mode + 1) % 2
