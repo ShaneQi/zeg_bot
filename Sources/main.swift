@@ -38,6 +38,7 @@ bot.run { update, bot in
 			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
 			//var fileUrlBytes = [UInt8](fileUrl.utf8)
 			var request = URLRequest(url: URL(string: "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1")!)
+			request.httpMethod = "POST"
 			request.httpBody = fileUrl.data(using: .utf8)
 			request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 			request.addValue("Simple \(algorithmiaApiKey)", forHTTPHeaderField: "Authorization")
