@@ -7,17 +7,10 @@
 //
 
 import ZEGBot
-import SQLite
 import Foundation
-import SwiftyJSON
-import PerfectLib
 
 let bot = ZEGBot(token: secret)
 let plugin = ZEGBotPlugin(bot: bot)
-let db = try! SQLite.init(
-	in: dbPath,
-	managing: [Post.self,
-	           User.self])
 
 var cuckoo = ""
 var mode = 0
@@ -27,16 +20,13 @@ bot.run { update, bot in
 
 	if case 1 = mode { print(update) }
 
-	if let message = update.message {
-
-		if let user = message.from {
-			try? user.replace(into: db)
-		}
+	if case .success(let update) = update,
+		let message = update.message {
 
 		if let photo = message.photo?.last,
-			let filePath = bot.getFile(ofId: photo.fileId)?.filePath {
+			case .success(let file) = bot.getFile(ofId: photo.fileId),
+			let filePath = file.filePath {
 			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
-			//var fileUrlBytes = [UInt8](fileUrl.utf8)
 			var request = URLRequest(url: URL(string: "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1")!)
 			request.httpMethod = "POST"
 			request.httpBody = fileUrl.data(using: .utf8)
@@ -44,54 +34,31 @@ bot.run { update, bot in
 			request.addValue("Simple \(algorithmiaApiKey)", forHTTPHeaderField: "Authorization")
 			URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
 				guard let data = data else { return }
-				let json = JSON(data: data)
-				let hasFace = !json["result"].arrayValue.isEmpty
-				var fileName = "\(message.messageId).jpg"
+				let response = try? JSONDecoder().decode(FaceDetectionBoxResponse.self, from: data)
+				let hasFace = (response?.result.isEmpty == false)
+				let fileName = "\(message.messageId).jpg"
 				var fileSaveRelativePath = "photos/"
 				if hasFace { fileSaveRelativePath += "faces/" }
 				let fileObsolutePath = filesPath + fileSaveRelativePath
-				let dir = Dir(fileObsolutePath)
 				do {
-					if !dir.exists { try dir.create() }
-					let file = PerfectLib.File(fileObsolutePath + fileName)
+					if !FileManager.default.fileExists(atPath: fileObsolutePath) {
+						try FileManager.default.createDirectory(atPath: fileObsolutePath, withIntermediateDirectories: true)
+					}
 					let request = URLRequest(url: URL(string: "https://api.telegram.org/file/bot\(secret)/" + filePath)!)
 					URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
 						do {
 							guard let data = data else { return }
-							try file.open(.readWrite, permissions: [.rwxUser, .rxGroup, .rxOther])
-							let _ = try file.write(bytes: [UInt8](data))
-							file.close()
+							let url = URL(fileURLWithPath: fileObsolutePath + fileName)
+							try data.write(to: url)
 							if hasFace { bot.send(message: "Gotcha!", to: message) }
-							if let senderId = message.from?.id {
-								let post = Post(uid: message.messageId,
-								                content: fileSaveRelativePath + fileName,
-								                senderId: senderId,
-								                updatedAt: message.date,
-								                parentUid: message.replyToMessage?.messageId,
-								                type: .photo,
-								                children: nil)
-								try post.replace(into: db)
-							}
 						} catch(let error) {
-							Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
+							bot.send(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).", to: shaneChat)
 						}
 						}.resume()
 				} catch(let error) {
-					Log.error(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).")
+					bot.send(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).", to: shaneChat)
 				}
 				}.resume()
-		}
-
-		if let senderId = message.from?.id,
-			let text = message.text {
-			let post = Post(uid: message.messageId,
-			                content: text,
-			                senderId: senderId,
-			                updatedAt: message.date,
-			                parentUid: message.replyToMessage?.messageId,
-			                type: .text,
-			                children: nil)
-			do { try post.replace(into: db) } catch (let error) { print("error: \(error)") }
 		}
 
 		if let locationA = message.location,
@@ -127,7 +94,7 @@ bot.run { update, bot in
 				plugin.smartReply(to: message, content: kr, type: .Sticker)
 
 			case "#朝君ISTYPING":
-				let _ = bot.send(sticker: cjtyping, to: message.chat)
+				let _ = bot.send(cjtyping, to: message.chat)
 
 			case "/WHOSYOURDADDY":
 				guard message.from?.id == shane else { break }

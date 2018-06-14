@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ZEGBot",
+        "repositoryURL": "https://github.com/shaneqi/ZEGBot",
+        "state": {
+          "branch": null,
+          "revision": "cb889cebb09598720ea33cf4637267c22ecc11ed",
+          "version": "4.0.1"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
