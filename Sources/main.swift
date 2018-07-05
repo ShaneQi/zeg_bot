@@ -26,39 +26,44 @@ bot.run { update, bot in
 		if let photo = message.photo?.last,
 			case .success(let file) = bot.getFile(ofId: photo.fileId),
 			let filePath = file.filePath {
-			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
-			var request = URLRequest(url: URL(string: "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1")!)
-			request.httpMethod = "POST"
-			request.httpBody = fileUrl.data(using: .utf8)
-			request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-			request.addValue("Simple \(algorithmiaApiKey)", forHTTPHeaderField: "Authorization")
-			URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
-				guard let data = data else { return }
-				let response = try? JSONDecoder().decode(FaceDetectionBoxResponse.self, from: data)
-				let hasFace = (response?.result.isEmpty == false)
-				let fileName = "\(message.messageId).jpg"
-				var fileSaveRelativePath = "photos/"
-				if hasFace { fileSaveRelativePath += "faces/" }
-				let fileObsolutePath = filesPath + fileSaveRelativePath
-				do {
-					if !FileManager.default.fileExists(atPath: fileObsolutePath) {
-						try FileManager.default.createDirectory(atPath: fileObsolutePath, withIntermediateDirectories: true)
-					}
-					let request = URLRequest(url: URL(string: "https://api.telegram.org/file/bot\(secret)/" + filePath)!)
+			let fileUrlString = "https://api.telegram.org/file/bot\(secret)/\(filePath)"
+			if let fileUrl = URL(string: fileUrlString) {
+				let imageRequest = URLRequest(url: fileUrl)
+				URLSession(configuration: .default).dataTask(with: imageRequest) { data, _, _ in
+					guard let data = data else { return }
+					var request = URLRequest(url: URL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(googleVisionApiKey)")!)
+					request.httpMethod = "POST"
+					request.httpBody = faceDetectionRequestBody(withImage: data)
+					request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 					URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
+						guard let data = data else { return }
+						let hasFace = hasFacesInResponse(data)
+						let fileName = "\(message.messageId).jpg"
+						var fileSaveRelativePath = "photos/"
+						if hasFace { fileSaveRelativePath += "faces/" }
+						let fileObsolutePath = filesPath + fileSaveRelativePath
 						do {
-							guard let data = data else { return }
-							let url = URL(fileURLWithPath: fileObsolutePath + fileName)
-							try data.write(to: url)
-							if hasFace { bot.send(message: "Gotcha!", to: message) }
+							if !FileManager.default.fileExists(atPath: fileObsolutePath) {
+								try FileManager.default.createDirectory(atPath: fileObsolutePath, withIntermediateDirectories: true)
+							}
+							let request = URLRequest(url: URL(string: "https://api.telegram.org/file/bot\(secret)/" + filePath)!)
+							URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
+								do {
+									guard let data = data else { return }
+									let url = URL(fileURLWithPath: fileObsolutePath + fileName)
+									try data.write(to: url)
+									if hasFace { bot.send(message: "Gotcha!", to: message) }
+								} catch(let error) {
+									bot.send(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).", to: shaneChat)
+								}
+								}.resume()
 						} catch(let error) {
 							bot.send(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).", to: shaneChat)
 						}
 						}.resume()
-				} catch(let error) {
-					bot.send(message: "Failed to save file to \(fileObsolutePath + fileName), because \(error).", to: shaneChat)
-				}
 				}.resume()
+			}
+
 		}
 
 		if let locationA = message.location,
