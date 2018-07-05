@@ -26,16 +26,14 @@ bot.run { update, bot in
 		if let photo = message.photo?.last,
 			case .success(let file) = bot.getFile(ofId: photo.fileId),
 			let filePath = file.filePath {
-			let fileUrl = "\"https://api.telegram.org/file/bot\(secret)/\(filePath)\""
-			var request = URLRequest(url: URL(string: "https://api.algorithmia.com/v1/algo/opencv/FaceDetectionBox/0.1.1")!)
+			let fileUrl = "https://api.telegram.org/file/bot\(secret)/\(filePath)"
+			var request = URLRequest(url: URL(string: "https://vision.googleapis.com/v1/images:annotate?key=\(googleVisionApiKey)")!)
 			request.httpMethod = "POST"
-			request.httpBody = fileUrl.data(using: .utf8)
+			request.httpBody = faceDetectionRequestBody(withUrlString: fileUrl)
 			request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-			request.addValue("Simple \(algorithmiaApiKey)", forHTTPHeaderField: "Authorization")
 			URLSession(configuration: .default).dataTask(with: request) { data, _, _ in
 				guard let data = data else { return }
-				let response = try? JSONDecoder().decode(FaceDetectionBoxResponse.self, from: data)
-				let hasFace = (response?.result.isEmpty == false)
+				let hasFace = hasFacesInResponse(data)
 				let fileName = "\(message.messageId).jpg"
 				var fileSaveRelativePath = "photos/"
 				if hasFace { fileSaveRelativePath += "faces/" }
