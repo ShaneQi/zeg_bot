@@ -7,15 +7,13 @@
 
 import Foundation
 
-func faceDetectionRequestBody(withUrlString urlString: String) -> Data {
+func faceDetectionRequestBody(withImage data: Data) -> Data {
 	return """
 	{
 		"requests": [
 			{
 				"image": {
-					"source": {
-						"imageUri": "\(urlString)"
-					}
+					"content": "\(String(data: data.base64EncodedData(), encoding: .utf8) ?? "")"
 				},
 				"features": [
 					{
@@ -28,6 +26,34 @@ func faceDetectionRequestBody(withUrlString urlString: String) -> Data {
 	""".data(using: .utf8) ?? Data()
 }
 
+struct FaceDetectionResponse: Decodable {
+
+	let hasFaces: Bool
+
+	private enum CodingKeys: String, CodingKey {
+		case responses
+	}
+
+	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		let dataArray = try container.decode([Anything].self, forKey: .responses)
+		self.hasFaces = !dataArray.isEmpty
+	}
+
+}
+
+struct Anything: Decodable {
+
+	init(from decoder: Decoder) throws {
+	}
+
+}
+
 func hasFacesInResponse(_ data: Data) -> Bool {
-	return false
+	do {
+		let resposne = try JSONDecoder().decode(FaceDetectionResponse.self, from: data)
+		return resposne.hasFaces
+	} catch {
+		return false
+	}
 }
