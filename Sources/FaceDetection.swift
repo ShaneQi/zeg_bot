@@ -37,7 +37,7 @@ struct FaceDetectionResponse: Decodable {
 	init(from decoder: Decoder) throws {
 		let container = try decoder.container(keyedBy: CodingKeys.self)
 		let dataArray = try container.decode([Anything].self, forKey: .responses)
-		self.hasFaces = !dataArray.isEmpty
+		self.hasFaces = dataArray.count > 1
 	}
 
 }
