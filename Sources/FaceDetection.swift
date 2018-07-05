@@ -28,23 +28,25 @@ func faceDetectionRequestBody(withImage data: Data) -> Data {
 
 struct FaceDetectionResponse: Decodable {
 
-	let hasFaces: Bool
+	let responses: [FaceAnnotations]
 
 	private enum CodingKeys: String, CodingKey {
 		case responses
 	}
 
-	init(from decoder: Decoder) throws {
-		let container = try decoder.container(keyedBy: CodingKeys.self)
-		let dataArray = try container.decode([Anything].self, forKey: .responses)
-		self.hasFaces = dataArray.count > 1
-	}
-
 }
 
-struct Anything: Decodable {
+struct FaceAnnotations: Decodable {
+
+	let hasAnything: Bool
+
+	private enum CodingKeys: String, CodingKey {
+		case faceAnnotations
+	}
 
 	init(from decoder: Decoder) throws {
+		let container = try decoder.container(keyedBy: CodingKeys.self)
+		self.hasAnything = container.contains(.faceAnnotations)
 	}
 
 }
@@ -52,7 +54,7 @@ struct Anything: Decodable {
 func hasFacesInResponse(_ data: Data) -> Bool {
 	do {
 		let resposne = try JSONDecoder().decode(FaceDetectionResponse.self, from: data)
-		return resposne.hasFaces
+		return resposne.responses.first?.hasAnything ?? false
 	} catch {
 		return false
 	}
